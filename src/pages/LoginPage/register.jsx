@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch , useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { registerUser } from "../../rudex/store/authSlice";
@@ -17,24 +17,23 @@ export default function Register() {
   const onSubmit = async (formData) => {
     setLoading(true);
     setErrorMsg("");
-    const result = await dispatch(registerUser(formData));
     setLoading(false);
 
-    const status = result.payload?.status || result.payload;
+    const result = await dispatch(registerUser(formData));
+
+    const status = result.payload?.status;
 
     if (status === 201) {
       reset();
       navigate("/login", { replace: true });
-    } else if (status === 400) {
-      setErrorMsg("User already exists");
     } else {
-      setErrorMsg("Server error, try again");
+      setErrorMsg(result.payload?.data?.message || "Server error");
     }
   };
 
   return (
     <div className="min-h-screen w-full bg-black flex items-center justify-center p-4">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-md"
@@ -99,7 +98,7 @@ export default function Register() {
 
           {/* Error Message */}
           {errorMsg && (
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="text-red-500 text-sm font-medium bg-red-500/10 p-3 rounded-lg border border-red-500/20"
@@ -120,9 +119,8 @@ export default function Register() {
           <button
             type="submit"
             disabled={loadingRegister}
-            className={`bg-green-600 text-white rounded-xl py-3 font-bold text-lg hover:bg-green-500 active:scale-95 transition-all duration-200 shadow-lg shadow-green-900/20 ${
-              loadingRegister ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+            className={`bg-green-600 text-white rounded-xl py-3 font-bold text-lg hover:bg-green-500 active:scale-95 transition-all duration-200 shadow-lg shadow-green-900/20 ${loadingRegister ? "opacity-50 cursor-not-allowed" : ""
+              }`}
           >
             {loadingRegister ? "Creating account..." : "Register"}
           </button>

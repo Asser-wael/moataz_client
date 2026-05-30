@@ -9,13 +9,15 @@ export const registerUser = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const res = await api.post("/register", formData);
-      return res.data;
+      return { data: res.data, status: res.status };
     } catch (err) {
-      return rejectWithValue(err.response?.data);
+      return rejectWithValue({
+        data: err.response?.data,
+        status: err.response?.status,
+      });
     }
   }
 );
-const API_URL = import.meta.env.VITE_API_URL;
 
 /* ================= LOGIN ================= */
 export const loginUser = createAsyncThunk(
@@ -23,14 +25,14 @@ export const loginUser = createAsyncThunk(
   async (data, { dispatch, rejectWithValue }) => {
     try {
       const res = await api.post("/login", data);
-
+      
       const token = res.data.accessToken;
-
+      
       localStorage.setItem("accessToken", token);
-
+      
       // مهم جدًا: تأكد التوكن اتخزن الأول
       await dispatch(getUser()).unwrap();
-
+      
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response?.status);
@@ -38,6 +40,7 @@ export const loginUser = createAsyncThunk(
   }
 );
 /* ================= LOGOUT ================= */
+const API_URL = import.meta.env.VITE_API_URL;
 export const logoutUser = createAsyncThunk(
   "auth/logout",
   async (_, { rejectWithValue }) => {
