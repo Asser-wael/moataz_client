@@ -41,11 +41,22 @@ export const createProduct = createAsyncThunk(
     "admin/createProduct",
     async (data, { rejectWithValue, dispatch }) => {
         try {
-            const res = await api.post("/admin/products/createProduct", data)
+            const token = localStorage.getItem("accessToken");
+
+            const res = await api.post(
+                "/admin/products/createProduct",
+                data,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
             await dispatch(getAllProducts());
-            return res.data
+            return res.data;
         } catch (err) {
-            return rejectWithValue(err.response?.status);
+            return rejectWithValue(err.response?.data);
         }
     }
 );
