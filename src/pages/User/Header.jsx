@@ -455,7 +455,7 @@ export default function Header() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
-      className="w-10/12 min-h-screen bg-black text-white overflow-x-hidden"
+      className="w-screen p-1.5 min-h-screen bg-black text-white overflow-x-hidden"
     >
       <Toast />
 
