@@ -23,7 +23,7 @@ function Dashboard() {
   const dispatch = useDispatch();
 
   return (
-    <div className="flex min-h-screen w-full bg-black text-white overflow-hidden">
+    <div className="flex h-full w-full bg-black text-white overflow-hidden">
       {/* Sidebar */}
       <motion.div
         animate={{ width: open ? 260 : 80 }}

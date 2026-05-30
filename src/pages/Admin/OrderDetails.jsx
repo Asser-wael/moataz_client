@@ -78,7 +78,7 @@ export default function OrderDetails() {
     if (!order) {
         return (
             <div className="w-full p-6 text-white">
-                <div className="bg-zinc-900 p-6 rounded-xl border border-red-500/20">
+                <div className="bg-zinc-900 p-6 rounded-xl border max-sm:w-85  border-red-500/20">
                     <h1 className="text-2xl text-red-400 font-bold mb-2">
                         Order Not Found
                     </h1>
