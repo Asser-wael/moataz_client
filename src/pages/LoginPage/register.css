@@ -32,3 +32,11 @@
   @apply text-blue-500 hover:text-blue-900 underline font-semibold transition-colors duration-300;
 } 
 
+body {
+  background-color: black;
+  color: aliceblue;
+  font-weight: 500;       /* بدل font-medium */
+  white-space: nowrap;    /* بدل whitespace-nowrap */
+}
+/* Futuristic Gaming Fonts */
+
