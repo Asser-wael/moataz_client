@@ -13,6 +13,9 @@ export default function Checkout() {
     const { cart, guestCart, totalprice, buyNow } = useSelector(
         (state) => state.cart
     );
+    const { loading } = useSelector(
+        (state) => state.order
+    );
 
     const token = localStorage.getItem("accessToken");
 
@@ -150,7 +153,7 @@ export default function Checkout() {
                 >
                     <input
                         {...register("name")} required
-                        placeholder="الاسم اللي حولت منه"
+                        placeholder="الاسم اللي حولت منه او الرقم الي هتحول منه"
                         className="w-full p-3 bg-black border border-white/10 rounded-xl outline-none focus:border-green-500"
                     />
 
@@ -175,12 +178,14 @@ export default function Checkout() {
 
                     {/* BUTTON */}
                     <button
+                        disabled={loading}
                         type="submit"
                         className="md:col-span-2 bg-green-500 hover:bg-green-400 text-black font-bold py-3 rounded-xl transition"
                     >
-                        ارسال الطلب 🚀
+                       {loading ? "....." : " ارسال الطلب 🚀"}
                     </button>
                     <button
+                        disabled={loading}
                         type="button"
                         onClick={() => {
                             navigate(-1)

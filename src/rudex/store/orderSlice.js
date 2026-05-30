@@ -117,6 +117,9 @@ const orderSlice = createSlice({
             })
 
             /* SEND ORDER */
+            .addCase(sendOrder.pending, (state) => {
+                state.loading = true;
+            })
             .addCase(sendOrder.fulfilled, (state) => {
                 state.loading = false;
                 state.guestCart = [];
