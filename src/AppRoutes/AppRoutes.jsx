@@ -21,8 +21,7 @@ const EditProdect = lazy(() => import("../pages/Admin/EditProdect.jsx"));
 const ViewProdect = lazy(() => import("../pages/Admin/ViewProdect.jsx"));
 const Ordersadmin = lazy(() => import("../pages/Admin/Orders.jsx"));
 const Users = lazy(() => import("../pages/Admin/Users.jsx"));
-const OrderDetails = lazy(() => import("../pages/admin/OrderDetails.jsx"));
-
+const OrderDetails = lazy(() => import("../pages/Admin/OrderDetails.jsx"));
 // User
 const Header = lazy(() => import("../pages/User/Header.jsx"));
 const Home = lazy(() => import("../pages/User/Home.jsx"));
