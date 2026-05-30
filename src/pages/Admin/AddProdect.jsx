@@ -38,7 +38,7 @@ export default function AddProdect() {
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: .2 }}
-      className="flex h-screen bg-zinc-950 text-white max-sm:scale-95 max-sm:-translate-y-8">
+      className="flex min-h-screen bg-zinc-950 text-white max-sm:scale-95 max-sm:-translate-y-8">
 
       <div className="flex-1 flex flex-col overflow-hidden">
 
