@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllOrders, updateStatus } from "../../rudex/store/orderSlice";
 import Loading from "../../components/loading";
-import Toast from "../../components/Toast";
 import { motion } from "framer-motion";
 import { setNotification } from "../../rudex/store/notificationSlice";
 
@@ -12,38 +11,26 @@ export default function OrderDetails() {
     const { id } = useParams();
     const dispatch = useDispatch();
 
-    const {
-        register,
-        handleSubmit,
-        reset,
-    } = useForm();
+    const { register, handleSubmit, reset } = useForm();
 
-    const {
-        allOrders,
-        loading,
-        updating,
-    } = useSelector((state) => state.order);
+    const { allOrders, loading, updating } = useSelector(
+        (state) => state.order
+    );
 
-    // GET ORDERS
     useEffect(() => {
         if (!allOrders.length) {
             dispatch(getAllOrders());
         }
     }, [dispatch, allOrders.length]);
 
-    // FIND ORDER
     const order = allOrders.find((o) => o._id === id);
 
-    // RESET FORM
     useEffect(() => {
         if (order) {
-            reset({
-                status: order.status,
-            });
+            reset({ status: order.status });
         }
     }, [order, reset]);
 
-    // SUBMIT
     const onSubmit = async (data) => {
         try {
             await dispatch(
@@ -69,20 +56,15 @@ export default function OrderDetails() {
         }
     };
 
-    // LOADING
-    if (loading) {
-        return <Loading />;
-    }
+    if (loading) return <Loading />;
 
-    // NOT FOUND
     if (!order) {
         return (
             <div className="w-full p-6 text-white">
-                <div className="bg-zinc-900 p-6 rounded-xl border  border-red-500/20">
+                <div className="bg-zinc-900 p-6 rounded-xl border border-red-500/20">
                     <h1 className="text-2xl text-red-400 font-bold mb-2">
                         Order Not Found
                     </h1>
-
                     <p className="text-gray-400">
                         The requested order does not exist.
                     </p>
@@ -92,13 +74,20 @@ export default function OrderDetails() {
     }
 
     return (
-        <div className="w-full p-6  max-sm:w-80  text-white">
-            <Toast />
-
+        <div className="w-full p-6 text-white">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-zinc-900 rounded-xl p-6 border border-white/10"
+                className="
+                    w-full
+                    max-w-4xl
+                    mx-auto
+                    bg-zinc-900
+                    rounded-xl
+                    p-6
+                    border
+                    border-white/10
+                "
             >
                 {/* HEADER */}
                 <div className="flex justify-between items-center mb-6">
@@ -111,47 +100,29 @@ export default function OrderDetails() {
                     </span>
                 </div>
 
-                {/* INFO GRID */}
-                <div className="grid md:grid-cols-2 gap-4 mb-6">
-
-                    {/* ORDER ID */}
+                {/* GRID */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div className="bg-black/40 p-4 rounded-lg">
-                        <p className="text-gray-400 text-sm">
-                            Order ID
-                        </p>
-
+                        <p className="text-gray-400 text-sm">Order ID</p>
                         <p className="text-green-400 font-bold break-all">
                             {order._id}
                         </p>
                     </div>
 
-                    {/* USER */}
                     <div className="bg-black/40 p-4 rounded-lg">
-                        <p className="text-gray-400 text-sm">
-                            User
-                        </p>
-
-                        <p>
-                            {order.userId?.name || "Unknown User"}
-                        </p>
+                        <p className="text-gray-400 text-sm">User</p>
+                        <p>{order.userId?.name || "Unknown User"}</p>
                     </div>
 
-                    {/* TOTAL */}
                     <div className="bg-black/40 p-4 rounded-lg">
-                        <p className="text-gray-400 text-sm">
-                            Total
-                        </p>
-
+                        <p className="text-gray-400 text-sm">Total</p>
                         <p className="text-green-400 font-bold">
                             ${order.totalPrice}
                         </p>
                     </div>
 
-                    {/* STATUS */}
                     <div className="bg-black/40 p-4 rounded-lg">
-                        <p className="text-gray-400 text-sm mb-2">
-                            Status
-                        </p>
+                        <p className="text-gray-400 text-sm mb-2">Status</p>
 
                         <form
                             onSubmit={handleSubmit(onSubmit)}
@@ -159,29 +130,17 @@ export default function OrderDetails() {
                         >
                             <select
                                 {...register("status")}
-                                className="w-full bg-zinc-800 border border-zinc-700 px-4 py-2 rounded-lg outline-none"
+                                className="w-full bg-zinc-800 px-4 py-2 rounded-lg"
                             >
-                                <option value="pending">
-                                    pending
-                                </option>
-
-                                <option value="confirmed">
-                                    confirmed
-                                </option>
-
-                                <option value="rejected">
-                                    rejected
-                                </option>
-
-                                <option value="completed">
-                                    completed
-                                </option>
+                                <option value="pending">pending</option>
+                                <option value="confirmed">confirmed</option>
+                                <option value="rejected">rejected</option>
+                                <option value="completed">completed</option>
                             </select>
 
                             <button
-                                type="submit"
                                 disabled={updating}
-                                className="bg-green-500 hover:bg-green-400 disabled:opacity-50 disabled:cursor-not-allowed text-black px-4 py-2 rounded-lg font-bold duration-150"
+                                className="bg-green-500 text-black px-4 py-2 rounded-lg"
                             >
                                 {updating ? "Saving..." : "Save"}
                             </button>
@@ -189,28 +148,15 @@ export default function OrderDetails() {
                     </div>
                 </div>
 
-                {/* WALLET NAME */}
+                {/* INFO */}
                 <div className="mb-4">
-                    <h2 className="text-green-300 font-bold">
-                        اسم المحفظة
-                    </h2>
-
-                    <p className="text-gray-300 mt-1">
-                        {order.name}
-                    </p>
+                    <h2 className="text-green-300 font-bold">Wallet Name</h2>
+                    <p>{order.name}</p>
                 </div>
 
-                <hr className="border-white/10 mb-4" />
-
-                {/* PHONE */}
                 <div className="mb-6">
-                    <h2 className="text-green-300 font-bold">
-                        رقم الواتس
-                    </h2>
-
-                    <p className="text-gray-300 mt-1">
-                        {order.phoneNum}
-                    </p>
+                    <h2 className="text-green-300 font-bold">Phone</h2>
+                    <p>{order.phoneNum}</p>
                 </div>
 
                 {/* PRODUCTS */}
@@ -222,51 +168,38 @@ export default function OrderDetails() {
                     {order.cart?.map((item) => (
                         <div
                             key={item._id}
-                            className="flex justify-between items-center bg-black/40 p-4 rounded-lg"
+                            className="flex justify-between bg-black/40 p-4 rounded-lg"
                         >
-                            {/* PRODUCT INFO */}
-                            <div className="flex flex-col gap-1">
-                                <span className="font-semibold">
-                                    {item.productId?.productName}
-                                </span>
-
-                                <span className="text-gray-400 text-sm">
-                                    Quantity × {item.quantity}
-                                </span>
+                            <div>
+                                <p>{item.productId?.productName}</p>
+                                <p className="text-gray-400 text-sm">
+                                    Qty × {item.quantity}
+                                </p>
                             </div>
 
-                            {/* EXTRA INFO */}
-                            <div className="flex flex-col gap-1 border-l border-white/10 pl-4">
-                                <span className="text-sm text-gray-300">
+                            <div className="text-right">
+                                <p className="text-sm">
                                     {item.productId?.productCategory}
-                                </span>
-
-                                <span className="text-sm text-gray-500">
+                                </p>
+                                <p className="text-gray-500 text-sm">
                                     {item.productId?.accountType}
-                                </span>
+                                </p>
                             </div>
                         </div>
                     ))}
                 </div>
 
-                {/* PAYMENT PHOTO */}
+                {/* PHOTO */}
                 {order.photo && (
                     <div>
-                        <h3 className="text-green-300 mb-3 font-bold">
+                        <h3 className="text-green-300 mb-3">
                             Payment Proof
                         </h3>
 
-                        <a
-                            href={order.photo}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <img
-                                src={order.photo}
-                                alt="payment-proof"
-                                className="rounded-xl max-w-sm border border-white/10 cursor-pointer hover:scale-105 duration-200"
-                            />
-                        </a>
+                        <img
+                            src={order.photo}
+                            className="rounded-xl max-w-sm border"
+                        />
                     </div>
                 )}
             </motion.div>
