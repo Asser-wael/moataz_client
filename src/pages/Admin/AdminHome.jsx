@@ -104,7 +104,7 @@ export default function AdminHome() {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white p-4 md:p-6 max-sm:w-90 max-md:w-112">
+    <div className="min-h-screen bg-black text-white p-7 md:p-6 max-sm:w-85 max-md:w-112">
 
       <Toast />
 
