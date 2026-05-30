@@ -153,7 +153,7 @@ export default function Checkout() {
                 >
                     <input
                         {...register("name")} required
-                        placeholder="الاسم اللي حولت منه او الرقم الي هتحول منه"
+                        placeholder=" الرقم الي هتحول منه"
                         className="w-full p-3 bg-black border border-white/10 rounded-xl outline-none focus:border-green-500"
                     />
 
@@ -182,7 +182,7 @@ export default function Checkout() {
                         type="submit"
                         className="md:col-span-2 bg-green-500 hover:bg-green-400 text-black font-bold py-3 rounded-xl transition"
                     >
-                       {loading ? "....." : " ارسال الطلب 🚀"}
+                        {loading ? "....." : " ارسال الطلب 🚀"}
                     </button>
                     <button
                         disabled={loading}
