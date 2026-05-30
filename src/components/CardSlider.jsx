@@ -76,7 +76,30 @@ function CardSlider() {
       );
     }
   };
+  const getCategoryStyle = (category) => {
+    const base =
+      "border px-3 py-1 rounded-full font-semibold tracking-wide text-xs md:text-sm";
 
+    switch (category?.toLowerCase()) {
+      case "ps4":
+        return `${base} text-blue-400 border-blue-400 bg-blue-400/10`;
+
+      case "ps5":
+        return `${base} text-sky-400 border-sky-400 bg-sky-400/10`;
+
+      case "xbox":
+        return `${base} text-green-400 border-green-400 bg-green-400/10`;
+
+      case "steam":
+        return `${base} text-cyan-300 border-cyan-300 bg-cyan-300/10`;
+
+      case "pc":
+        return `${base} text-gray-300 border-gray-500 bg-gray-500/10`;
+
+      default:
+        return `${base} text-yellow-400 border-yellow-400 bg-yellow-400/10`;
+    }
+  };
   return (
     <section className="w-full bg-black py-20 text-white overflow-x-hidden">
       <div className="max-w-7xl mx-auto px-4">
@@ -139,10 +162,15 @@ function CardSlider() {
               {/* CONTENT */}
               <div className="p-5 sm:p-8 md:p-10 flex flex-col justify-center">
 
-                <span className="text-green-300 text-xs mb-3">
+                <span
+                  className={`
+      absolute top-3 right-3
+      z-10
+      ${getCategoryStyle(current.productCategory)}
+    `}
+                >
                   {current.productCategory}
                 </span>
-
                 <h3 className="text-2xl md:text-4xl font-black mb-4 break-words">
                   {current.productName}
                 </h3>
@@ -198,11 +226,10 @@ function CardSlider() {
             <button
               key={i}
               onClick={() => setIndex(i)}
-              className={`h-2 rounded-full transition-all ${
-                i === index
-                  ? "w-8 bg-green-400"
-                  : "w-2 bg-zinc-700"
-              }`}
+              className={`h-2 rounded-full transition-all ${i === index
+                ? "w-8 bg-green-400"
+                : "w-2 bg-zinc-700"
+                }`}
             />
           ))}
         </div>
