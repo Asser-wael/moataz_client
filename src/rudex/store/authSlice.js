@@ -15,6 +15,7 @@ export const registerUser = createAsyncThunk(
     }
   }
 );
+const API_URL = import.meta.env.VITE_API_URL;
 
 /* ================= LOGIN ================= */
 export const loginUser = createAsyncThunk(
@@ -42,7 +43,7 @@ export const logoutUser = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       await axios.post(
-        "http://localhost:3001/logout",
+        `${API_URL}/logout`,
         {},
         { withCredentials: true }
       );
