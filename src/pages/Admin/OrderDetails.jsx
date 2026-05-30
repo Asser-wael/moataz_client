@@ -90,7 +90,7 @@ export default function OrderDetails() {
                 "
             >
                 {/* HEADER */}
-                <div className="flex justify-between items-center mb-6">
+                <div className="flex flex-col md:flex-row justify-between md:items-center gap-2 mb-6">
                     <h1 className="text-2xl text-green-400 font-bold">
                         Order Details
                     </h1>
@@ -126,7 +126,7 @@ export default function OrderDetails() {
 
                         <form
                             onSubmit={handleSubmit(onSubmit)}
-                            className="flex gap-2 items-center"
+                            className="flex flex-col sm:flex-row gap-2"
                         >
                             <select
                                 {...register("status")}
@@ -150,12 +150,16 @@ export default function OrderDetails() {
 
                 {/* INFO */}
                 <div className="mb-4">
-                    <h2 className="text-green-300 font-bold">Wallet Name</h2>
+                    <h2 className="text-green-300 font-bold">
+                        Wallet Name
+                    </h2>
                     <p>{order.name}</p>
                 </div>
 
                 <div className="mb-6">
-                    <h2 className="text-green-300 font-bold">Phone</h2>
+                    <h2 className="text-green-300 font-bold">
+                        Phone
+                    </h2>
                     <p>{order.phoneNum}</p>
                 </div>
 
@@ -168,7 +172,7 @@ export default function OrderDetails() {
                     {order.cart?.map((item) => (
                         <div
                             key={item._id}
-                            className="flex justify-between bg-black/40 p-4 rounded-lg"
+                            className="flex flex-col sm:flex-row justify-between gap-2 bg-black/40 p-4 rounded-lg"
                         >
                             <div>
                                 <p>{item.productId?.productName}</p>
@@ -177,7 +181,7 @@ export default function OrderDetails() {
                                 </p>
                             </div>
 
-                            <div className="text-right">
+                            <div className="sm:text-right">
                                 <p className="text-sm">
                                     {item.productId?.productCategory}
                                 </p>
@@ -198,7 +202,7 @@ export default function OrderDetails() {
 
                         <img
                             src={order.photo}
-                            className="rounded-xl max-w-sm border"
+                            className="rounded-xl max-w-full sm:max-w-sm border"
                         />
                     </div>
                 )}
