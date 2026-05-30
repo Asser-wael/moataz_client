@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;800&family=Rajdhani:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn {
+  @apply bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 cursor-pointer;
+}
+
+.card {
+  @apply bg-white shadow-md p-4 rounded-xl;
+} 
+/* إذا كنت تريد CSS خارجي، استخدم هذا مع Tailwind */
+ body {
+  @apply bg-gray-100 min-h-screen flex items-center justify-center;
+}
+
+.form-container {
+  @apply flex flex-col bg-white w-80 rounded-2xl p-6 gap-4 shadow-md;
+}
+
+.form-input {
+  @apply p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400;
+}
+
+.form-button {
+  @apply bg-blue-500 text-white rounded-3xl py-2 px-4 font-semibold cursor-pointer
+         hover:bg-blue-700 hover:rounded-xl transition-all duration-300;
+}
+
+.form-link {
+  @apply text-blue-500 hover:text-blue-900 underline font-semibold transition-colors duration-300;
+} 
+
+body {
+  background-color: black;
+  color: aliceblue;
+  font-weight: 500;       /* بدل font-medium */
+  white-space: nowrap;    /* بدل whitespace-nowrap */
+}
+/* Futuristic Gaming Fonts */
+
+
+body{
+    font-family: 'Rajdhani', sans-serif;
+}
+
+h1,h2,h3,h4,h5,h6,
+.logo,
+.navbar,
+.hero-title{
+    font-family: 'Orbitron', sans-serif;
+}
