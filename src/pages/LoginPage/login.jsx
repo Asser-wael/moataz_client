@@ -83,12 +83,6 @@ export default function Login() {
             >
               Create a new account ?
             </Link>
-            <Link
-              to="/resetPassword"
-              className="text-sm text-zinc-400 hover:text-green-400"
-            >
-              Forgot Password?
-            </Link>
           </div>
           <div className="flex flex-col justify-center items-center gap-3">
             <button
