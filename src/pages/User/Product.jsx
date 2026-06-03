@@ -1,5 +1,3 @@
-
-
 import { sendOrder } from "../../rudex/store/orderSlice";
 import { setBuyNow } from "../../rudex/store/cartSlice";
 import { useEffect, useState,useMemo } from "react";

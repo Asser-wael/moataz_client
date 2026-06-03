@@ -13,7 +13,7 @@ export const getAdminUsers = createAsyncThunk(
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      return res.data; // users فقط
+      return res.data; 
     } catch (err) {
       return rejectWithValue(err.response?.status);
     }
@@ -27,7 +27,7 @@ export const deleteUser = createAsyncThunk(
       const res = await api.delete(`/admin/deleteUser/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      return res.data; // users فقط
+      return res.data; 
     } catch (err) {
       return rejectWithValue(err.response?.status);
     }

@@ -407,7 +407,6 @@ export default function Header() {
     if (Token) dispatch(getCart());
   }, [dispatch, Token]);
 
-  /* ================= SEARCH (FIXED) ================= */
   useEffect(() => {
     if (!search.trim()) {
       setResults([]);
@@ -432,7 +431,6 @@ export default function Header() {
     return () => clearTimeout(delay);
   }, [search]);
 
-  /* ================= OUTSIDE CLICK ================= */
   useEffect(() => {
     const handleClick = (e) => {
       const isInsideSearch = e.target.closest(".search-box");

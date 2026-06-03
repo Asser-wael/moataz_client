@@ -58,7 +58,6 @@ export default function Games() {
         }
     };
 
-    /* ================= CLIENT FILTER (خفيف حاليًا) ================= */
     const filteredProducts = allProducts?.filter((item) => {
         const matchSearch = item.productName
             ?.toLowerCase()
@@ -197,6 +196,16 @@ export default function Games() {
 
                                 <p className="text-gray-400 text-sm line-clamp-2">
                                     {item.productDescription}
+                                </p>
+                                <p
+                                    className={
+                                        item.productStock === "inStock"
+                                            ? "text-green-400 text-sm line-clamp-2"
+                                            : "text-red-400 text-sm line-clamp-2"
+                                    }
+                                >
+                                    {item.productStock}
+
                                 </p>
 
                                 <div className="flex justify-between items-center pt-2">

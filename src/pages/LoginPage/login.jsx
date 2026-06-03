@@ -3,8 +3,8 @@ import "./register.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { loginUser } from "../../rudex/store/authSlice";
-import { motion } from "framer-motion"; // استيراد موشن للتناسق مع الداشبورد
-import { MdEmail, MdLockOutline } from "react-icons/md"; // أيقونات إضافية لشكل أجمل
+import { motion } from "framer-motion"; 
+import { MdEmail, MdLockOutline } from "react-icons/md"; 
 
 export default function Login() {
   const navigate = useNavigate();

@@ -10,7 +10,7 @@ import Toast from "../../components/Toast";
 function Dashboard() {
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
-  const location = useLocation(); // لمعرفة الصفحة الحالية
+  const location = useLocation(); 
 
   const menuItems = [
     { id: 1, title: "Dashboard", icon: <MdDashboard />, to: "/admin" },

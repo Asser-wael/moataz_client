@@ -59,7 +59,7 @@ export default function AdminHome() {
     );
   }, [allOrders]);
 
-  // ================= STATUS STYLE =================
+  // ================= STYLE =================
   const getStatusStyle = (status) => {
     switch (status) {
       case "pending":
