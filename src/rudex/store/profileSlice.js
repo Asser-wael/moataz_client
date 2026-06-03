@@ -150,7 +150,8 @@ const profileSlice = createSlice({
       })
       .addCase(getRandomProducts.fulfilled, (state, action) => {
         state.loadingRandom = false;
-        state.randomProducts = action.payload;
+        state.randomProducts = action.payload.filter((e) => 
+          e.productStock == "inStock");
       })
 
       /* PRODUCT */

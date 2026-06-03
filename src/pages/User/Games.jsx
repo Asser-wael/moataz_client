@@ -204,7 +204,7 @@ export default function Games() {
                                             : "text-red-400 text-sm line-clamp-2"
                                     }
                                 >
-                                    {item.productStock}
+                                    {item.productStock === "inStock" ? "In Stock" : "Out Of Stock" }
 
                                 </p>
 
