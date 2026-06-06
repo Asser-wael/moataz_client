@@ -393,6 +393,7 @@ export default function Product() {
                         <motion.button
                             whileHover={{ scale: 1.03 }}
                             whileTap={{ scale: 0.95 }}
+                            disabled={product.productStock !== "inStock"}
                             className="
                 px-6 py-3 rounded-2xl
                 bg-green-500/15
