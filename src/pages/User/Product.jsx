@@ -420,6 +420,7 @@ export default function Product() {
                         <motion.button
                             whileHover={{ scale: 1.03 }}
                             whileTap={{ scale: 0.95 }}
+                            disabled={product.productStock !== "inStock"}
                             onClick={() => handleAddToCart(product)}
                             className="px-6 py-3 rounded-2xl bg-zinc-900 border border-zinc-700 text-white font-semibold hover:border-green-500/30 hover:text-green-300 transition-all"
                         >
