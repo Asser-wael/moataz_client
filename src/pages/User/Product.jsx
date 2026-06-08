@@ -1,6 +1,6 @@
 import { sendOrder } from "../../rudex/store/orderSlice";
 import { setBuyNow } from "../../rudex/store/cartSlice";
-import { useEffect, useState,useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 import { motion } from "framer-motion";
 
@@ -99,14 +99,14 @@ export default function Product() {
     }, [dispatch]);
 
     /* ================= LOADING ================= */
-    
+
     const similarProductsUpdated = useMemo(() => {
         return similarProducts?.filter(
             (e) => e._id !== id
         );
     }, [similarProducts, id]);
 
-    
+
     if (loadingProduct || !productDetails) {
         return <Loading />;
     }
@@ -263,15 +263,16 @@ export default function Product() {
 
                     <div className="space-y-3">
 
-                        <h1
+                        <div
                             className="
-                text-3xl md:text-5xl font-black
-                text-green-400
-                leading-tight
-              "
+                            text-3xl md:text-5xl font-black
+                            text-green-400
+                            leading-tight
+                            break-words
+                            "
                         >
                             {product.productName}
-                        </h1>
+                        </div>
                         <div className="space-y-2 w-full min-w-0">
 
                             <h3
