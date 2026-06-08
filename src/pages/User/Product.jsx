@@ -269,6 +269,8 @@ export default function Product() {
                             text-green-400
                             leading-tight
                             break-words
+                            flex
+                             flex-wrap
                             "
                         >
                             {product.productName}
