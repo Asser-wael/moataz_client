@@ -37,7 +37,6 @@ body {
   background-color: black;
   color: aliceblue;
   font-weight: 500;       /* بدل font-medium */
-  white-space: nowrap;    /* بدل whitespace-nowrap */
 }
 /* Futuristic Gaming Fonts */
 
