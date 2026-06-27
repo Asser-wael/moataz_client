@@ -29,7 +29,6 @@ export default function Deals() {
         window.scrollTo(0, 0);
     }, [dispatch]);
 
-    /* ================= FILTER ================= */
 
     const filteredDeals = useMemo(() => {
         return allDeals?.filter((item) =>
@@ -39,7 +38,6 @@ export default function Deals() {
         );
     }, [allDeals, search]);
 
-    /* ================= HELPERS ================= */
 
     const capitalize = (text) => {
         if (!text) return "";
@@ -88,7 +86,6 @@ export default function Deals() {
 
             <div className="relative z-10 px-4 py-10">
 
-                {/* ================= HEADER ================= */}
 
                 <motion.div
                     initial={{ opacity: 0, y: -40 }}
@@ -198,7 +195,6 @@ export default function Deals() {
                     </div>
                 </motion.div>
 
-                {/* ================= DEALS ================= */}
 
                 <div
                     className="
@@ -255,7 +251,6 @@ export default function Deals() {
                                 "
                             >
 
-                                {/* GLOW */}
                                 <div
                                     className="
                                         absolute inset-0 opacity-0
@@ -268,7 +263,6 @@ export default function Deals() {
                                     "
                                 />
 
-                                {/* IMAGE */}
                                 <div className="relative overflow-hidden">
 
                                     <motion.img
@@ -283,7 +277,6 @@ export default function Deals() {
                                         "
                                     />
 
-                                    {/* OVERLAY */}
                                     <div
                                         className="
                                             absolute inset-0
@@ -294,7 +287,6 @@ export default function Deals() {
                                         "
                                     />
 
-                                    {/* CATEGORY */}
                                     <div
                                         className={`
                                             absolute top-3 right-3 z-20
@@ -305,7 +297,6 @@ export default function Deals() {
                                         {capitalize(item.productCategory)}
                                     </div>
 
-                                    {/* DEAL */}
                                     <motion.div
                                         animate={{
                                             scale: [1, 1.1, 1],
@@ -331,7 +322,6 @@ export default function Deals() {
 
                                 </div>
 
-                                {/* CONTENT */}
                                 <div className="relative z-10 p-5 space-y-4">
 
                                     <h3
@@ -356,7 +346,6 @@ export default function Deals() {
                                         {item.productDescription}
                                     </p>
 
-                                    {/* PRICE */}
                                     <div className="flex items-center justify-between pt-2">
 
                                         <div>

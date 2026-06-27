@@ -18,9 +18,11 @@ export default function App() {
     }
   }, [dispatch]);
   return (
-    <Suspense fallback={<Loading/>}>
+    <>
       <Toast />
-      <RouterProvider router={AppRoutes} />
-    </Suspense>
+      <Suspense fallback={<Loading />}>
+        <RouterProvider router={AppRoutes} />
+      </Suspense>
+    </>
   )
 }

@@ -40,7 +40,7 @@ export default function Ordersadmin() {
   };
 
   return (
-    <div className="w-full min-h-screen p-6 bg-black text-white">
+    <div className="w-fit min-h-screen p-6 bg-black text-white">
 
       {/* HEADER */}
       <motion.div

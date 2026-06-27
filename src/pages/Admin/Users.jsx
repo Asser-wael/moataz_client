@@ -4,6 +4,7 @@ import { getAdminUsers, deleteUser } from "../../rudex/store/adminSlice";
 import { motion } from "framer-motion";
 import { TiUserDeleteOutline } from "react-icons/ti";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import Loading from "../../components/loading";
 export default function Users() {
   const dispatch = useDispatch();
 
@@ -16,7 +17,7 @@ export default function Users() {
   }, [dispatch]);
 
   if (loadingUsers) {
-    return <h1 className="text-white text-center mt-10">Loading...</h1>;
+    return <Loading/>
   }
 
   return (

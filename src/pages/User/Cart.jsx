@@ -43,9 +43,7 @@ export default function Cart() {
     }
   }, [dispatch, token]);
 
-  // ==============================
-  // SELECT CART
-  // ==============================
+
 
   const currentCart = token ? cart : guestCart;
 
@@ -57,9 +55,6 @@ export default function Cart() {
     ? totalprice
     : guestTotalPrice;
 
-  // ==============================
-  // FILTER
-  // ==============================
 
   const filteredCart = (currentCart || [])
     .filter((item) => {
@@ -99,7 +94,6 @@ export default function Cart() {
 
       <div className="relative z-10 max-w-7xl mx-auto space-y-6">
 
-        {/* TOP BAR */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -152,7 +146,6 @@ export default function Cart() {
 
         </motion.div>
 
-        {/* PRODUCTS */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
           {filteredCart.length > 0 ? (
@@ -177,7 +170,6 @@ export default function Cart() {
 
                   <div>
 
-                    {/* IMAGE */}
                     <div className="relative w-full aspect-video rounded-lg overflow-hidden mb-4 border border-white/5">
 
                       <img
@@ -186,10 +178,8 @@ export default function Cart() {
                         className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                       />
 
-                      {/* QUANTITY */}
                       <div className="absolute bottom-2 right-2 bg-black/80 flex items-center gap-3 px-2 py-1 rounded-lg">
 
-                        {/* MINUS */}
                         <button
                           onClick={() =>
                             token
@@ -205,7 +195,6 @@ export default function Cart() {
                           {item.quantity}
                         </span>
 
-                        {/* PLUS */}
                         <button
                           onClick={() =>
                             token
@@ -221,7 +210,6 @@ export default function Cart() {
 
                     </div>
 
-                    {/* NAME */}
                     <div className="flex justify-between items-start gap-2 mb-2">
 
                       <h2 className="text-lg font-bold line-clamp-1">
@@ -234,7 +222,6 @@ export default function Cart() {
 
                     </div>
 
-                    {/* DESC */}
                     <p className="text-zinc-400 text-xs line-clamp-2 mb-4">
 
                       {product.productDescription ||
@@ -244,10 +231,8 @@ export default function Cart() {
 
                   </div>
 
-                  {/* FOOTER */}
                   <div className="flex justify-between items-center flex-wrap gap-3 pt-2 border-t border-white/5">
 
-                    {/* STOCK */}
                     {product.productStock === "inStock" ? (
 
                       <span className="text-xs text-green-500 bg-green-500/10 px-2 py-1 rounded-md">
@@ -262,7 +247,6 @@ export default function Cart() {
 
                     )}
 
-                    {/* ACTIONS */}
                     <div className="flex gap-2">
 
                       <button
@@ -274,7 +258,6 @@ export default function Cart() {
                         View
                       </button>
 
-                      {/* REMOVE */}
                       <button
                         onClick={() =>
                           token

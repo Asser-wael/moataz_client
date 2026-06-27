@@ -23,7 +23,6 @@ export default function Games() {
     const [category, setCategory] = useState("");
     const [accountType, setAccountType] = useState("");
 
-    /* ================= FETCH PRODUCTS (PAGINATION) ================= */
     useEffect(() => {
         dispatch(
             getAllProducts({
@@ -81,7 +80,6 @@ export default function Games() {
     return (
         <div className="w-full min-h-screen bg-black text-white py-10 px-4">
 
-            {/* HEADER */}
             <motion.div
                 initial={{ opacity: 0, y: -30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -116,10 +114,8 @@ export default function Games() {
                 </div>
             </motion.div>
 
-            {/* FILTERS */}
             <div className="max-w-7xl mx-auto mb-10 grid grid-cols-1 md:grid-cols-3 gap-4">
 
-                {/* SEARCH */}
                 <div className="relative">
                     <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-green-400" />
                     <input
@@ -130,7 +126,6 @@ export default function Games() {
                     />
                 </div>
 
-                {/* CATEGORY */}
                 <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
@@ -144,7 +139,6 @@ export default function Games() {
                     <option value="steam">steam</option>
                 </select>
 
-                {/* ACCOUNT TYPE */}
                 <select
                     value={accountType}
                     onChange={(e) => setAccountType(e.target.value)}
@@ -159,7 +153,6 @@ export default function Games() {
                 </select>
             </div>
 
-            {/* PRODUCTS */}
             <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
                 {filteredProducts?.length > 0 ? (
@@ -179,7 +172,6 @@ export default function Games() {
                             "
                         >
 
-                            {/* IMAGE */}
                             <img
                                 loading="lazy"
                                 src={item.productImage?.[0]}
@@ -187,7 +179,6 @@ export default function Games() {
                                 className="w-full aspect-video object-cover hover:scale-105 transition"
                             />
 
-                            {/* CONTENT */}
                             <div className="p-5 space-y-2">
 
                                 <h3 className="text-lg font-bold text-green-300">
@@ -228,7 +219,6 @@ export default function Games() {
                 )}
             </div>
 
-            {/* PAGINATION */}
             <div className="flex justify-center items-center gap-4 mt-12">
 
                 <button

@@ -184,11 +184,9 @@ export default function Product() {
     return (
         <div className="w-full min-h-screen bg-black text-white py-6 md:py-10">
 
-            {/* ================= MAIN PRODUCT ================= */}
 
             <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 items-center">
 
-                {/* IMAGE */}
 
                 <motion.div
                     initial={{ opacity: 0, x: -60 }}
@@ -202,7 +200,6 @@ export default function Product() {
                     "
                 >
 
-                    {/* CATEGORY */}
 
                     <div
                         className={`
@@ -214,7 +211,6 @@ export default function Product() {
                         {capitalize(product.productCategory)}
                     </div>
 
-                    {/* HOT DEAL */}
 
                     <div
                         className="
@@ -228,7 +224,6 @@ export default function Product() {
                         🔥 HOT DEAL
                     </div>
 
-                    {/* IMAGE */}
 
                     <img
                         src={product.productImage?.[0]}
@@ -239,7 +234,6 @@ export default function Product() {
             "
                     />
 
-                    {/* OVERLAY */}
 
                     <div
                         className="
@@ -250,7 +244,6 @@ export default function Product() {
                     />
                 </motion.div>
 
-                {/* INFO */}
 
                 <motion.div
                     initial={{ opacity: 0, x: 60 }}
@@ -259,7 +252,6 @@ export default function Product() {
                     className="space-y-6"
                 >
 
-                    {/* TITLE */}
 
                     <div className="space-y-3">
 
@@ -304,7 +296,6 @@ export default function Product() {
                         </div>
                     </div>
 
-                    {/* PRICE */}
 
                     <div
                         className="
@@ -323,11 +314,9 @@ export default function Product() {
                         </span>
                     </div>
 
-                    {/* DETAILS */}
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 
-                        {/* STOCK */}
 
                         <div
                             className="
@@ -351,7 +340,6 @@ export default function Product() {
                             </p>
                         </div>
 
-                        {/* CATEGORY */}
 
                         <div
                             className="
@@ -370,7 +358,6 @@ export default function Product() {
                             </div>
                         </div>
 
-                        {/* ACCOUNT */}
 
                         <div
                             className="
@@ -389,7 +376,6 @@ export default function Product() {
 
                     </div>
 
-                    {/* BUTTONS */}
 
                     <div className="flex flex-col sm:flex-row gap-4 pt-2">
 
@@ -450,7 +436,6 @@ export default function Product() {
                 </motion.div>
             </div>
 
-            {/* ================= SIMILAR PRODUCTS ================= */}
 
             <div className="max-w-7xl mx-auto px-4 mt-20">
 
@@ -483,7 +468,6 @@ export default function Product() {
               "
                             >
 
-                                {/* IMAGE */}
 
                                 <div className="relative overflow-hidden">
 
@@ -508,7 +492,6 @@ export default function Product() {
 
                                 </div>
 
-                                {/* CONTENT */}
 
                                 <div className="p-5 space-y-3">
 
@@ -529,7 +512,6 @@ export default function Product() {
                 </div>
             </div>
 
-            {/* ================= RANDOM PRODUCTS ================= */}
 
             <div className="max-w-7xl mx-auto px-4 mt-20">
 
@@ -556,7 +538,6 @@ export default function Product() {
                 "
                             >
 
-                                {/* IMAGE */}
 
                                 <div className="relative overflow-hidden">
 
@@ -581,7 +562,6 @@ export default function Product() {
 
                                 </div>
 
-                                {/* CONTENT */}
 
                                 <div className="p-5 space-y-3">
 
@@ -604,13 +584,3 @@ export default function Product() {
         </div>
     );
 }
-
-
-
-
-
-
-
-
-
-///

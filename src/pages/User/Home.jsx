@@ -68,7 +68,6 @@ export default function Home() {
       className="bg-black text-white overflow-hidden"
     >
 
-      {/* HERO */}
 
       <motion.section
         variants={fade}
@@ -130,7 +129,6 @@ export default function Home() {
 
       </motion.section>
 
-      {/* DEALS */}
 
       <motion.section
         variants={fadeUp}
@@ -141,7 +139,6 @@ export default function Home() {
         <CardSlider />
       </motion.section>
 
-      {/* CATEGORIES */}
 
       <motion.section
         variants={fadeUp}
@@ -206,7 +203,6 @@ export default function Home() {
 
       </motion.section>
 
-      {/* PRODUCTS */}
 
       <motion.section
         variants={fadeUp}

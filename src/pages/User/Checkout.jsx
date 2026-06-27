@@ -75,9 +75,7 @@ export default function Checkout() {
                     CHECKOUT
                 </h1>
 
-                {/* باقي الكود زي ما هو */}
 
-                {/* CART */}
                 <div className="bg-zinc-900 border border-white/10 rounded-2xl p-4 md:p-6 space-y-4">
 
                     <h2 className="text-lg font-bold text-white mb-2">

@@ -104,7 +104,7 @@ export default function OrderDetails() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div className="bg-black/40 p-4 rounded-lg">
                         <p className="text-gray-400 text-sm">Order ID</p>
-                        <p className="text-green-400 font-bold break-all">
+                        <p className="text-green-400 font-bold break-all text-sm">
                             {order._id}
                         </p>
                     </div>

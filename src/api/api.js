@@ -1,10 +1,5 @@
 import axios from "axios";
-
 const API_URL = import.meta.env.VITE_API_URL;
-
-// detect local or production
-const isLocal = window.location.hostname === "localhost";
-
 const api = axios.create({
   baseURL: API_URL,
   withCredentials: true,
@@ -30,18 +25,15 @@ api.interceptors.response.use(
 
     if (
       error.response?.status === 401 &&
-      !original._retry &&
-      localStorage.getItem("accessToken")
+      error.response?.data?.code === "TOKEN_EXPIRED" &&
+      !original._retry
     ) {
       original._retry = true;
 
       try {
-        const refreshURL = isLocal
-          ? "http://localhost:3001/refresh"
-          : `${API_URL}/refresh`;
 
         const res = await axios.post(
-          refreshURL,
+          `${API_URL}/refresh`,
           {},
           { withCredentials: true }
         );
@@ -50,7 +42,10 @@ api.interceptors.response.use(
 
         localStorage.setItem("accessToken", newToken);
 
-        original.headers.Authorization = `Bearer ${newToken}`;
+        original.headers = {
+          ...original.headers,
+          Authorization: `Bearer ${newToken}`,
+        };
 
         return api(original);
       } catch (err) {

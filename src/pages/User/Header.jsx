@@ -453,11 +453,9 @@ export default function Header() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
-      className="w-screen p-1.5 min-h-screen bg-black text-white overflow-x-hidden"
+      className="  w-screen  p-1.5 min-h-screen bg-black text-white overflow-x-hidden "
     >
-      <Toast />
 
-      {/* HEADER */}
       <motion.div
         initial={{ y: -40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -466,7 +464,6 @@ export default function Header() {
       >
         <div className="w-full px-4 md:px-8 py-4 flex items-center justify-between gap-4">
 
-          {/* LEFT: LOGO & HAMBURGER (MOBILE) */}
           <div className="flex items-center gap-4">
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -475,7 +472,6 @@ export default function Header() {
               {isOpen ? <FaTimes /> : <FaBars />}
             </button>
 
-            {/* LOGO */}
             <motion.h1
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -491,7 +487,6 @@ export default function Header() {
             </motion.h1>
           </div>
 
-          {/* DESKTOP NAV */}
           <nav className="hidden lg:block">
             <motion.ul className="flex items-center gap-6 xl:gap-8">
               {navItems.map((item, index) => (
@@ -513,10 +508,8 @@ export default function Header() {
             </motion.ul>
           </nav>
 
-          {/* RIGHT SIDE: SEARCH & BUTTONS */}
           <div className="flex items-center gap-3 msg:gap-4 ml-auto lg:ml-0">
 
-            {/* SEARCH — (VISIBLE IN DESKTOP & SCREEN > SM) */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -539,7 +532,6 @@ export default function Header() {
                 "
               />
 
-              {/* Suggestions Dropdown */}
               <AnimatePresence>
                 {showResults && results.length > 0 && (
                   <motion.div
@@ -595,7 +587,6 @@ export default function Header() {
               </span>
             </motion.button>
 
-            {/* USER PROFILE & LOGIN */}
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -620,7 +611,6 @@ export default function Header() {
                   : "Login"}
             </motion.button>
 
-            {/* LOGOUT BUTTON (DESKTOP) */}
             {userData?.role && (
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -635,7 +625,6 @@ export default function Header() {
           </div>
         </div>
 
-        {/* MOBILE MENU */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
@@ -657,7 +646,6 @@ export default function Header() {
                     className="w-full bg-green-500/5 border border-green-500/20 rounded-xl py-2 px-4 text-sm text-white outline-none focus:border-green-400"
                   />
 
-                  {/* Mobile Suggestions Dropdown */}
                   <AnimatePresence>
                     {showResults && results.length > 0 && (
                       <motion.div
@@ -690,7 +678,6 @@ export default function Header() {
                   </AnimatePresence>
                 </div>
 
-                {/* Navigation Links */}
                 <ul className="flex flex-col gap-5">
                   {navItems.map((item) => (
                     <li
@@ -707,7 +694,6 @@ export default function Header() {
                 </ul>
               </div>
 
-              {/* LOGOUT BUTTON (MOBILE) */}
               {userData?.role && (
                 <motion.button
                   initial={{ opacity: 0, y: 20 }}
@@ -724,8 +710,7 @@ export default function Header() {
         </AnimatePresence>
       </motion.div>
 
-      {/* PAGES & FOOTER */}
-      <Outlet />
+      <Outlet className="overflow-x-hidden" />
       <Footer />
     </motion.div>
   );
