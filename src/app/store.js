@@ -8,6 +8,7 @@ import customuseSlice from "../features/customuseSlice";
 import soundNotificationSlice from "../features/soundNotificationSlice";
 import notificationsAdminSlice from "../features/notificationsAdminSlice";
 import cartSlice from "../features/cartSlice";
+import favoritesSlice from "../features/favoritesSlice.js";
 import orderSlice from "../features/orderSlice";
 
 
@@ -21,6 +22,7 @@ export const store = configureStore({
     orderSlice,
     usersSlice,
     cartSlice,
+    favoritesSlice,
     notificationsAdminSlice,
     soundNotificationSlice
   },

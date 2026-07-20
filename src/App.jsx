@@ -17,6 +17,7 @@ import Toast from "./components/Toast";
 import WaitingAdmin from "./components/waitingAdmin";
 
 import status from "./assets/status.mp3";
+import money from "./assets/money.mp3";
 
 import { socket } from "./services/socket";
 
@@ -24,6 +25,7 @@ import { getUser } from "./features/authSlice";
 import { setNotification } from "./features/notificationSlice";
 import { getAdminOrders, updateTracking } from "./features/orderSlice";
 import { show } from "./features/soundNotificationSlice";
+import { getCart } from "./features/cartSlice";
 
 const playStatusSound = () => {
   new Audio(status).play().catch(() => { });
@@ -83,6 +85,8 @@ export default function App() {
 
   useEffect(() => {
     dispatch(getUser());
+    dispatch(getCart());
+
   }, [dispatch]);
 
   // انضمام العملاء لغرف تتبع الطلبات المخزنة محلياً عند تشغيل التطبيق
@@ -159,26 +163,22 @@ export default function App() {
 
   // إدارة غرف الأدمن واستقبال الطلبات الجديدة وتنبيهات نقص المخزون عبر السوكت
   useEffect(() => {
-    if (!localStorage.getItem("accessToken")) return;
+    if (user?.role !== "admin") return;
+
+    console.log("joined admin room");
 
     socket.emit("joinAdminRoom");
 
     const handleNewOrder = async (order) => {
       await dispatch(getAdminOrders());
-
-      dispatch(
-        show({
-          message: `New Order - ${order.shippingAddress.fullName}`,
-        })
-      );
+      new Audio(money).play().catch(() => { });
+      dispatch(show({ message: `New Order - ${order.walletName}` }));
     };
 
     const handleWarning = (data) => {
       showLowStockToast(data);
     };
 
-    socket.off("newOrder");
-    socket.off("warning");
     socket.on("newOrder", handleNewOrder);
     socket.on("warning", handleWarning);
 
@@ -186,15 +186,14 @@ export default function App() {
       socket.off("newOrder", handleNewOrder);
       socket.off("warning", handleWarning);
     };
-  }, [dispatch]);
+  }, [user, dispatch]);
 
-  if (user && user.status === false) {
+  if (user && !user.status && window.location.pathname !== "/login/verifyEmail") {
     return <WaitingAdmin />;
   }
-
   return (
     <>
-      <Toaster  position="top-center" />
+      <Toaster position="top-center" />
       <Toast />
       <SoundPlayer />
       <Popup />

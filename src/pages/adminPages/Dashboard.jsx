@@ -360,7 +360,7 @@ export default function Dashboard() {
                 </tr>
               </thead>
 
-              <tbody>
+              {/* <tbody>
                 {allOrders?.slice(0, 5).map((o, i) => (
                   <motion.tr
                     key={o._id}
@@ -393,7 +393,7 @@ export default function Dashboard() {
                     </td>
                   </motion.tr>
                 ))}
-              </tbody>
+              </tbody> */}
             </table>
           </div>
         </div>

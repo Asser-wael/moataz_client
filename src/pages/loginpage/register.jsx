@@ -27,7 +27,7 @@ export default function Register() {
 
     if (status === "success") {
       reset();
-      navigate("/login", { replace: true });
+      navigate("/login/verifyEmail", { replace: true });
     } else {
       setErrorMsg(res.payload?.message || "Server error");
     }
@@ -151,34 +151,7 @@ export default function Register() {
                 {...register("password", { required: true })}
               />
             </div>
-          <div>
-            <label className="pl-1 text-[var(--color-muted)] mb-1 block text-sm">
-              Status
-            </label>
 
-            <select
-              {...register("role", { required: true })}
-              className="
-              w-full
-              bg-[var(--color-card)]
-              border border-[var(--color-border)]
-              text-[var(--color-text)]
-              p-3 rounded-2xl
-              focus:outline-none
-              focus:ring-2
-              focus:ring-[var(--color-accent)]/40
-              focus:border-[var(--color-accent)]
-              transition-all
-              appearance-none
-              cursor-pointer
-            "
-            >
-              <option value="">Select</option>
-              <option value="admin">Admin</option>
-              <option value="chef">Chef</option>
-              <option value="cashier">Cashier</option>
-            </select>
-          </div>
           </div>
 
           {/* Error Message */}

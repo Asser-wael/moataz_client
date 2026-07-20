@@ -1,322 +1,477 @@
-import { FaTruckFast, FaShirt, FaRegCreditCard, FaTrophy } from "react-icons/fa6";
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
+// أيقونات المنصات
+import { FaXbox, FaSteam } from "react-icons/fa6";
+import { SiSony } from "react-icons/si";
+
+// Redux slices
 import { getAllProducts, setCat } from "../../features/productsSlice";
 import { getOffers, getPopularProducts, getAllCategories } from "../../features/customuseSlice";
 import { setView } from "../../features/usersSlice";
 import UserView from "../../components/UserView";
+import CardSlider from "../../components/CardSlider";
 
+/* ================= ANIMATION VARIANTS ================= */
 const fadeUp = {
-  hidden: { opacity: 0, y: 16 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+  hidden: { opacity: 0, y: 34 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
 };
 
-const stagger = {
+const staggerContainer = {
   hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.08 } },
+  show: { opacity: 1, transition: { staggerChildren: 0.09, delayChildren: 0.05 } },
 };
+
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.92 },
+  show: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+};
+
+// شريط المنصات المتحرك — العنصر المميز اللي بيدي هوية الصفحة
+const MARQUEE_ITEMS = [
+  "PLAYSTATION",
+  "XBOX",
+  "PC / STEAM",
+  "INSTANT DELIVERY",
+  "SECURE PAYMENTS",
+  "24/7 SUPPORT",
+];
+
+// فئات افتراضية لو الـ API لسه ملوش كاتيجوريز
+const DEFAULT_CATEGORIES = [
+  { name: "PLAYSTATION", icon: <SiSony />, searchName: "PlayStation" },
+  { name: "XBOX", icon: <FaXbox />, searchName: "Xbox" },
+  { name: "PC / STEAM", icon: <FaSteam />, searchName: "Steam" },
+];
+
+const FALLBACK_IMAGE = "https://placehold.co/300x300/111/fff?text=%20";
+
+// أيقونة افتراضية حسب اسم الكاتيجوري لو مفيهاش صورة
+function platformIcon(name) {
+  const upper = name?.toUpperCase() ?? "";
+  if (upper.includes("XBOX")) return <FaXbox />;
+  if (upper.includes("SONY") || upper.includes("PLAYSTATION")) return <SiSony />;
+  return <FaSteam />;
+}
+
+// خلي أول عنصر في البروداكتس المفضلة ياخد مساحة أكبر (بينتو ستايل)
+const bentoClass = (i) => (i === 0 ? "sm:col-span-2 sm:row-span-2" : "");
 
 export default function Home() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const [viewAll, setViewAll] = useState(false);
 
   const {
     categories = [],
-    offers,
-    popularProducts,
     loadingCategories,
+    popularProducts = [],
     loadingPopular,
   } = useSelector((state) => state.customuseSlice);
 
   const { view } = useSelector((state) => state.usersSlice);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     dispatch(getOffers());
     dispatch(getAllProducts());
     dispatch(getAllCategories());
     dispatch(getPopularProducts());
   }, [dispatch]);
 
-  const features = [
-    { id: 1, icon: <FaTruckFast size={18} />, title: "Fast delivery", desc: "On time, every time" },
-    { id: 2, icon: <FaShirt size={18} />, title: "Premium fabric", desc: "Finished with care" },
-    { id: 3, icon: <FaRegCreditCard size={18} />, title: "Secure payment", desc: "100% protected" },
-    { id: 4, icon: <FaTrophy size={18} />, title: "Best craftsmanship", desc: "Built to last" },
-  ];
-
   if (view) {
     return <UserView />;
   }
 
   return (
-    <section className="mx-auto w-full max-w-[1400px] px-5 py-14 sm:px-8 lg:px-14">
-      {/* Hero */}
-      <div className="grid w-full grid-cols-1 gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
+    <motion.div
+      initial="hidden"
+      animate="show"
+      className="bg-[var(--color-bg)] text-[var(--color-text)] overflow-hidden min-h-screen"
+    >
+      {/* ================= HERO SECTION ================= */}
+      <motion.section
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        className="min-h-[80vh] flex flex-col items-center justify-center px-6 text-center relative overflow-hidden pb-16"
+      >
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="flex flex-col justify-center"
-        >
-          <span className="mb-5 text-[12px] font-semibold uppercase tracking-[0.22em] text-[var(--color-accent)]">
-            The season&rsquo;s edit
-          </span>
+          initial={{ scale: 0.7, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 1.3, ease: "backOut" }}
+          className="absolute w-[300px] h-[300px] sm:w-[560px] sm:h-[560px] blur-[130px] rounded-full pointer-events-none glow-blob"
+        />
 
-          <h1 className="font-serif text-[42px] italic leading-[1.08] tracking-tight text-[var(--color-text)] sm:text-[56px] lg:text-[64px]">
-            Considered style,
-            <br />
-            made to last.
-          </h1>
-
-          <p className="mt-6 max-w-md text-[15px] leading-relaxed text-[var(--color-muted)] sm:text-base">
-            A small, thoughtfully made collection — chosen for quality first,
-            not trends. Every piece is cut and finished the way we&rsquo;d wear it ourselves.
-          </p>
-
-          <button
-            onClick={() => navigate("/products")}
-            className="mt-9 w-fit border border-[var(--color-text)] px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.14em] text-[var(--color-text)] transition-colors hover:bg-[var(--color-text)] hover:text-[var(--color-bg)]"
-          >
-            Browse the selection
-          </button>
-        </motion.div>
-
-        {/* Offers list */}
         <motion.div
-          variants={stagger}
+          variants={staggerContainer}
           initial="hidden"
           animate="show"
-          className="flex flex-col divide-y divide-[var(--color-border)] border-y border-[var(--color-border)]"
+          className="max-w-4xl relative z-10 space-y-5"
         >
-          {offers?.length === 0 ? (
-            Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="h-20 animate-pulse bg-[var(--color-card)]" />
-            ))
-          ) : (
-            offers?.map((offer, index) => (
-              <motion.div
-                key={offer._id || index}
-                variants={fadeUp}
-                onClick={() => dispatch(setView(offer))}
-                className="group flex cursor-pointer items-center gap-4 py-5"
-              >
-                <span className="w-8 shrink-0 font-serif text-sm italic text-[var(--color-muted)]">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
+          <motion.span
+            variants={fadeUp}
+            className="font-bold tracking-widest text-xs uppercase sm:text-sm px-4 py-1.5 rounded-full inline-block border border-[var(--color-border)] text-[var(--color-accent)] pill-soft"
+          >
+            Premium Gaming Marketplace
+          </motion.span>
 
-                <div className="h-14 w-14 shrink-0 overflow-hidden bg-[var(--color-card)]">
-                  <img
-                    src={`${import.meta.env.VITE_API_URL}/uploads/${offer?.image}`}
-                    alt=""
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
+          <motion.h1
+            variants={fadeUp}
+            className="text-4xl md:text-7xl font-black tracking-tight leading-none text-[var(--color-text)]"
+          >
+            LEVEL UP YOUR
+          </motion.h1>
 
-                <div className="flex min-w-0 flex-1 flex-col">
-                  <h3 className="truncate text-[15px] font-semibold text-[var(--color-text)]">
-                    {offer.name || "Special offer"}
-                  </h3>
-                  <p className="line-clamp-1 text-[13px] text-[var(--color-muted)]">
-                    {offer.description || "A limited-time selection"}
-                  </p>
-                </div>
+          <motion.span
+            variants={fadeUp}
+            whileHover={{ scale: 1.04 }}
+            className="text-[var(--color-accent)] text-3xl md:text-6xl block font-black cursor-default select-none glow-text"
+          >
+            GAMING EXPERIENCE
+          </motion.span>
 
-                {offer.offer == true && (
-                  <div className="flex items-center gap-2">
-                    {offer.name}
-                    <span className="text-gray-400 line-through">
-                      {offer.sizes[0].price}
-                    </span>
+          <motion.p
+            variants={fadeUp}
+            className="text-[var(--color-muted)] mt-6 max-w-xl mx-auto text-sm md:text-base"
+          >
+            Buy premium accounts, official cd-keys, and exclusive deals instantly with 100% secured delivery.
+          </motion.p>
 
-                    <span className="font-semibold text-[var(--color-accent)]">
-                      {offer.sizes[0].priceOffer}
-                    </span>
-                  </div>
-                )}
-              </motion.div>
-            ))
-          )}
+          <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => navigate("/products")}
+              className="px-8 py-4 bg-[var(--color-accent)] text-[var(--color-bg)] font-bold rounded-2xl transition-all cta-glow"
+            >
+              Start Shopping
+            </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                const element = document.getElementById("popular-products");
+                element?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="px-8 py-4 border border-[var(--color-border)] rounded-2xl bg-[var(--color-card)] font-medium text-[var(--color-text)] transition-colors hover:border-[var(--color-accent)]"
+            >
+              Explore Products
+            </motion.button>
+          </motion.div>
         </motion.div>
-      </div>
 
-      {/* Features */}
-      <motion.div
-        variants={stagger}
+        {/* الشريط المتحرك — العنصر المميز اللي بيدي هوية بصرية للصفحة */}
+        <div className="w-full mt-16 relative z-10 border-y border-[var(--color-border)] py-3 marquee-mask">
+          <div className="marquee-track">
+            {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((label, i) => (
+              <span key={i} className="marquee-item">
+                {label}
+                <span className="marquee-dot">•</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      </motion.section>
+
+      {/* ================= OFFERS (CARD SLIDER) ================= */}
+      <motion.section
+        variants={fadeUp}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: true, amount: 0.4 }}
-        className="mt-16 flex w-full flex-wrap gap-x-10 gap-y-6 border-y border-[var(--color-border)] py-8"
+        viewport={{ once: true, margin: "-100px" }}
+        className="py-6 border-b border-[var(--color-border)] card-bg-soft"
       >
-        {features.map((item, i) => (
-          <motion.div
-            variants={fadeUp}
-            key={item.id}
-            className={`flex flex-1 min-w-[220px] items-center gap-3 ${i > 0 ? "sm:border-l sm:border-[var(--color-border)] sm:pl-10" : ""
-              }`}
-          >
-            <span className="text-[var(--color-accent)]">{item.icon}</span>
-            <div>
-              <h4 className="text-[14px] font-semibold text-[var(--color-text)]">{item.title}</h4>
-              <p className="text-[13px] text-[var(--color-muted)]">{item.desc}</p>
-            </div>
-          </motion.div>
-        ))}
-      </motion.div>
+        <CardSlider />
+      </motion.section>
 
-      {/* Categories */}
-      <div className="mt-16 w-full">
-        <div className="mb-8 flex w-full items-end justify-between">
-          <h2 className="font-serif text-[28px] italic text-[var(--color-text)] sm:text-[32px]">
-            Categories
-          </h2>
-          {categories.length > 8 && (
+      {/* ================= GAME CATEGORIES ================= */}
+      <motion.section
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-100px" }}
+        className="py-20 px-6 max-w-7xl mx-auto"
+      >
+        <div className="flex justify-between items-end mb-12">
+          <div>
+            <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--color-accent)] block mb-2">
+              Browse By
+            </span>
+            <h2 className="text-2xl md:text-4xl font-black text-[var(--color-text)]">
+              GAME <span className="text-[var(--color-accent)]">CATEGORIES</span>
+            </h2>
+          </div>
+          {categories.length > 3 && (
             <button
-              className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[var(--color-muted)] transition-colors hover:text-[var(--color-text)]"
-              onClick={() => setViewAll((prev) => !prev)}
+              onClick={() => setViewAll(!viewAll)}
+              className="text-xs sm:text-sm font-semibold text-[var(--color-muted)] hover:text-[var(--color-accent)] transition-colors"
             >
-              {viewAll ? "Show less" : "View all"}
+              {viewAll ? "Show Less" : "View All"}
             </button>
           )}
         </div>
 
-        <div className="flex flex-wrap gap-x-10 gap-y-8">
-          {loadingCategories ? (
-            Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="h-24 w-20 animate-pulse rounded-full bg-[var(--color-card)]" />
-            ))
-          ) : (
-            <motion.div
-              variants={stagger}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.2 }}
-              className="flex w-full flex-wrap gap-x-10 gap-y-8"
-            >
-              {(viewAll ? categories : categories.slice(0, 8)).map((category) => (
-                <motion.div
-                  variants={fadeUp}
-                  key={category._id}
-                  onClick={() => {
-                    dispatch(setCat(category.name));
-                    navigate("/products");
-                  }}
-                  className="flex w-20 cursor-pointer flex-col items-center gap-3"
-                >
-                  {category.image && (
-                    <img
-                      src={`${import.meta.env.VITE_API_URL}/uploads/${category.image}`}
-                      alt={category.name}
-                      className="h-16 w-16 rounded-full object-cover grayscale transition-all duration-300 hover:grayscale-0"
-                    />
-                  )}
-                  <h3 className="w-full truncate text-center text-[12px] font-medium uppercase tracking-[0.06em] text-[var(--color-text)]">
-                    {category.name}
-                  </h3>
-                </motion.div>
-              ))}
-            </motion.div>
-          )}
-        </div>
-      </div>
-
-      {/* Popular products */}
-      <div className="mt-16 w-full">
-        <h2 className="mb-8 font-serif text-[28px] italic text-[var(--color-text)] sm:text-[32px]">
-          Popular products
-        </h2>
-
-        {loadingPopular ? (
-          <div className="grid grid-cols-1 gap-px bg-[var(--color-border)] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {loadingCategories ? (
+          <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="h-[360px] w-full animate-pulse bg-[var(--color-card)]" />
+              <div key={i} className="aspect-square animate-pulse rounded-3xl bg-[var(--color-border)]" />
             ))}
           </div>
         ) : (
           <motion.div
-            variants={stagger}
+            variants={staggerContainer}
             initial="hidden"
             whileInView="show"
-            viewport={{ once: true, amount: 0.1 }}
-            className="grid w-full grid-cols-1 gap-px border border-[var(--color-border)] bg-[var(--color-border)] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+            viewport={{ once: true }}
+            className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4"
           >
-            {popularProducts?.map((item) => {
-              const product = item.id;
-              if (!product) return null;
-
-              return (
-                <motion.div
-                  key={item._id}
-                  variants={fadeUp}
-                  className="flex h-full flex-col bg-[var(--color-card)]"
-                >
-                  <div
-                    className="group relative aspect-[4/5] w-full cursor-pointer overflow-hidden"
-                    onClick={() => dispatch(setView(product))}
+            {categories.length === 0
+              ? DEFAULT_CATEGORIES.map((cat, i) => (
+                  <motion.div
+                    key={i}
+                    variants={scaleIn}
+                    whileHover={{ y: -4 }}
+                    onClick={() => {
+                      dispatch(setCat(cat.searchName));
+                      navigate("/products");
+                    }}
+                    className="card-bg-soft group flex aspect-square cursor-pointer flex-col items-center justify-center gap-3 rounded-3xl border border-[var(--color-border)] text-center transition-all hover:border-[var(--color-accent)]"
                   >
-                    <img
-                      src={`${import.meta.env.VITE_API_URL}/uploads/${product?.image}`}
-                      alt={product?.name}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  </div>
-
-                  <div className="flex flex-1 flex-col p-5">
-                    <h3 className="truncate text-[16px] font-semibold text-[var(--color-text)]">
-                      {product?.name}
-                    </h3>
-                    <p className="mt-1 line-clamp-2 text-[13px] text-[var(--color-muted)]">
-                      {product?.description}
-                    </p>
-
-                    <div className="mt-4 flex-1 space-y-2">
-                      {product.sizes
-                        ?.filter((size) => size.price)
-                        .map((size, idx) => (
-                          <div
-                            key={idx}
-                            className="flex items-center justify-between border-t border-[var(--color-border)] py-2 text-[13px]"
-                          >
-                            <span className="text-[var(--color-muted)]">{size.name}</span>
-                            {size?.offer == "" && (
-                              <span className="font-semibold text-[var(--color-text)]">
-                                {size.price} EGP
-                              </span>
-
-                            )
-                            }
-                            {size?.offer != "" && (
-                              <span className="font-semibold text-[var(--color-text)]">
-                                {size.priceOffer} EGP
-                              </span>
-
-                            )
-                            }
-                          </div>
-                        ))}
+                    <div className="text-4xl text-[var(--color-muted)] transition-colors group-hover:text-[var(--color-accent)]">
+                      {cat.icon}
                     </div>
-
-                    <button
-                      onClick={() => dispatch(setView(product))}
-                      className="mt-5 flex w-full items-center justify-center border border-[var(--color-text)] py-2.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-[var(--color-text)] transition-colors hover:bg-[var(--color-text)] hover:text-[var(--color-bg)]"
-                    >
-                      View
-                    </button>
-                  </div>
-                </motion.div>
-              );
-            })}
+                    <h3 className="text-sm font-bold tracking-wider text-[var(--color-text)]">{cat.name}</h3>
+                  </motion.div>
+                ))
+              : (viewAll ? categories : categories.slice(0, 4)).map((category) => (
+                  <motion.div
+                    key={category._id}
+                    variants={scaleIn}
+                    whileHover={{ y: -4 }}
+                    onClick={() => {
+                      dispatch(setCat(category.name));
+                      navigate("/products");
+                    }}
+                    className="card-bg-soft group flex aspect-square cursor-pointer flex-col items-center justify-center gap-3 rounded-3xl border border-[var(--color-border)] p-6 text-center transition-all hover:border-[var(--color-accent)]"
+                  >
+                    {category.image ? (
+                      <img
+                        src={`${import.meta.env.VITE_API_URL}/uploads/${category.image}`}
+                        alt={category.name}
+                        onError={(e) => (e.target.src = FALLBACK_IMAGE)}
+                        className="h-16 w-16 rounded-2xl border border-[var(--color-border)] object-cover transition-all group-hover:border-[var(--color-accent)]"
+                      />
+                    ) : (
+                      <div className="text-3xl text-[var(--color-muted)] transition-colors group-hover:text-[var(--color-accent)]">
+                        {platformIcon(category.name)}
+                      </div>
+                    )}
+                    <h3 className="w-full truncate text-sm font-bold uppercase tracking-wide text-[var(--color-text)]">
+                      {category.name}
+                    </h3>
+                  </motion.div>
+                ))}
           </motion.div>
         )}
-      </div>
+      </motion.section>
 
+      {/* ================= POPULAR PRODUCTS (BENTO) ================= */}
+<motion.section
+  id="popular-products"
+  variants={fadeUp}
+  initial="hidden"
+  whileInView="show"
+  viewport={{ once: true, margin: "-100px" }}
+  className="py-20 px-6 max-w-7xl mx-auto"
+>
+  <div className="text-center mb-14">
+    <span className="text-[11px] uppercase tracking-[0.3em] text-[var(--color-accent)] font-semibold">
+      Fan Favorites
+    </span>
+
+    <h2 className="mt-2 text-3xl md:text-5xl font-black text-[var(--color-text)]">
+      POPULAR{" "}
+      <span className="text-[var(--color-accent)]">PRODUCTS</span>
+    </h2>
+
+    <p className="mt-4 text-[var(--color-muted)] max-w-xl mx-auto">
+      Browse the most purchased gaming accounts with secure delivery and the
+      best prices.
+    </p>
+  </div>
+
+  {loadingPopular ? (
+    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-7">
+      {Array.from({ length: 8 }).map((_, i) => (
+        <div
+          key={i}
+          className="h-[360px] rounded-3xl bg-[var(--color-border)] animate-pulse"
+        />
+      ))}
+    </div>
+  ) : (
+    <motion.div
+      variants={staggerContainer}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true }}
+      className="grid sm:grid-cols-2 lg:grid-cols-4 gap-7"
+    >
+      {popularProducts?.slice(0, 8).map((item) => {
+        const product = item.id || item;
+        if (!product) return null;
+
+        const mainAccount =
+          product.account?.find((a) => a.priceOffer || a.price) ||
+          product.account?.[0];
+
+        return (
+          <motion.div
+            key={product._id}
+            variants={fadeUp}
+            whileHover={{ y: -8, scale: 1.02 }}
+            transition={{ duration: 0.25 }}
+            onClick={() => dispatch(setView(product))}
+            className="group overflow-hidden rounded-3xl bg-[var(--color-bg)] border border-white/5 hover:border-[var(--color-accent)] hover:shadow-[0_20px_45px_rgba(0,0,0,.45)] transition-all cursor-pointer"
+          >
+            <div className="relative aspect-[16/10] overflow-hidden">
+              <img
+                src={`${import.meta.env.VITE_API_URL}/uploads/${product.image}`}
+                alt={product.name}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                onError={(e) => {
+                  e.target.src =
+                    "https://placehold.co/900x600/111827/ffffff?text=Game";
+                }}
+              />
+
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+
+              {product.offer && (
+                <span className="absolute top-4 left-4 rounded-full bg-red-500 px-3 py-1 text-[11px] font-bold text-white shadow-lg">
+                  SALE
+                </span>
+              )}
+
+              <div className="absolute bottom-0 left-0 right-0 p-5">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-white/70">
+                  {product.Category}
+                </span>
+
+                <h3 className="mt-1 text-xl font-bold text-white line-clamp-2">
+                  {product.name}
+                </h3>
+              </div>
+            </div>
+
+            <div className="p-5">
+              <p className="line-clamp-2 text-sm text-[var(--color-muted)]">
+                {product.description}
+              </p>
+
+              <div className="mt-4 flex items-center gap-2 text-xs text-[var(--color-muted)]">
+                <span>{product.GameplayType}</span>
+                <span>•</span>
+                <span>{product?.account?.length} Editions</span>
+              </div>
+
+              <div className="mt-6 flex items-center justify-between">
+                <div>
+                  <p className="text-[11px] text-[var(--color-muted)]">
+                    Starting From
+                  </p>
+
+                  {mainAccount ? (
+                    product.offer && mainAccount.priceOffer ? (
+                      <>
+                        <p className="text-xs line-through text-gray-500">
+                          {mainAccount.price} EGP
+                        </p>
+
+                        <h4 className="text-2xl font-black text-[var(--color-accent)]">
+                          {mainAccount.priceOffer} EGP
+                        </h4>
+                      </>
+                    ) : (
+                      <h4 className="text-2xl font-black text-[var(--color-accent)]">
+                        {mainAccount.price} EGP
+                      </h4>
+                    )
+                  ) : (
+                    <span className="text-sm text-gray-500">
+                      Out of Stock
+                    </span>
+                  )}
+                </div>
+
+                <button className="rounded-xl bg-[var(--color-accent)]  text-[var(--color-text)] px-4 py-2 text-sm font-bold  transition hover:scale-105">
+                  View
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        );
+      })}
+    </motion.div>
+  )}
+</motion.section>
+
+      {/* أدوات مساعدة تعتمد فقط على متغيرات الثيم */}
       <style>{`
-        .font-serif { font-family: "Fraunces", serif; }
+        .glow-blob {
+          background-color: color-mix(in srgb, var(--color-accent) 12%, transparent);
+        }
+        .glow-text {
+          text-shadow: 0 0 15px color-mix(in srgb, var(--color-accent) 45%, transparent);
+        }
+        .pill-soft {
+          background-color: color-mix(in srgb, var(--color-accent) 10%, transparent);
+        }
+        .card-bg-soft {
+          background-color: color-mix(in srgb, var(--color-card) 70%, transparent);
+        }
+        .cta-glow:hover {
+          box-shadow: 0 0 20px color-mix(in srgb, var(--color-accent) 40%, transparent);
+        }
+
+        .marquee-mask {
+          overflow: hidden;
+          -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+          mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+        }
+        .marquee-track {
+          display: flex;
+          width: max-content;
+          animation: marquee 26s linear infinite;
+        }
+        .marquee-item {
+          display: inline-flex;
+          align-items: center;
+          gap: 1.5rem;
+          padding: 0 1.5rem;
+          font-family: "Orbitron", sans-serif;
+          font-weight: 700;
+          font-size: 0.8rem;
+          letter-spacing: 0.18em;
+          color: var(--color-muted);
+          white-space: nowrap;
+        }
+        .marquee-dot {
+          color: var(--color-accent);
+        }
+        @keyframes marquee {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .marquee-track { animation: none; }
+        }
       `}</style>
-    </section>
+    </motion.div>
   );
 }

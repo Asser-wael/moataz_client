@@ -96,7 +96,7 @@ export default function Cart() {
         <div className="space-y-4">
           {cart.map((item, index) => (
             <motion.div
-              key={`${item._id}-${item.size}-${item.color}`}
+              key={`${item._id}-${item.option}`}
               initial={{ opacity: 0, y: 25 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
@@ -134,12 +134,11 @@ export default function Cart() {
                       {item.name}
                     </h2>
 
-                    <p className="text-[var(--color-muted)] mt-2">
-                      Size: {item.size}
-                    </p>
-                    <p className="text-[var(--color-muted)] mt-2">
-                      Size: {item.color}
-                    </p>
+                    {item.option && (
+                      <p className="text-[var(--color-muted)] mt-2">
+                        Option: {item.option}
+                      </p>
+                    )}
 
                     <div className="mt-3 text-2xl font-black text-[var(--color-accent)]">
                       {item.price} L.E
@@ -184,8 +183,7 @@ export default function Cart() {
                       dispatch(
                         removeFromCart({
                           _id: item._id,
-                          size: item.size,
-                          color: item.color,
+                          option: item.option,
                         })
                       )
                     }

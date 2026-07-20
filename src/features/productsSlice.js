@@ -33,6 +33,7 @@ export const getAllProducts = createAsyncThunk(
     async (_, { rejectWithValue, dispatch }) => {
         try {
             const res = await api.get("/getAllProducts");
+            
             return res.data.data;
         } catch (err) {
             return rejectWithValue(err.response?.data);
@@ -179,6 +180,7 @@ const productsSlice = createSlice({
             .addCase(getAllProducts.fulfilled, (state, action) => {
                 try {
                     state.loadingProducts = false;
+                    
                     state.products = action.payload;
                 } catch (err) {
                     console.error("getAllProducts.fulfilled reducer error:", err);

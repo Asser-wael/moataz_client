@@ -11,6 +11,7 @@ import Customuse from "../pages/adminPages/Customuse.jsx";
 // Auth
 const Login = lazy(() => import("../pages/loginpage/login.jsx"));
 const Register = lazy(() => import("../pages/loginpage/register.jsx"));
+const VerifyEmail = lazy(() => import("../pages/loginpage/verifyEmail.jsx"));
 
 
 // Admin
@@ -52,6 +53,12 @@ export const AppRoutes = createBrowserRouter([
     ),
   },
   {
+    path: "/login/verifyEmail",
+    element: (
+        <VerifyEmail />
+    ),
+  },
+  {
     path: "/admin",
     element: (
       <ProtectedRoute >
@@ -76,7 +83,7 @@ export const AppRoutes = createBrowserRouter([
         element: <Orders />,
       },
       {
-        path: "orders/:id",
+        path: "orders/view",
         element: <OrderDetails />,
       },
       {

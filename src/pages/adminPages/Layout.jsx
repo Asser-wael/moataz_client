@@ -4,17 +4,19 @@ import {
   MdDashboard,
   MdShoppingCart,
   MdPeople,
-  MdMenu,
   MdDashboardCustomize,
   MdLogout,
+  MdChevronLeft,
+  MdChevronRight,
 } from "react-icons/md";
 import { BiPackage } from "react-icons/bi";
 import { FaPager } from "react-icons/fa";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../../features/authSlice";
 import ThemeToggle from "../../components/ToggleButton";
 import { IoIosNotifications } from "react-icons/io";
+
 export default function Layout() {
   const [open, setOpen] = useState(true);
   const dispatch = useDispatch();
@@ -27,77 +29,153 @@ export default function Layout() {
     { id: 3, title: "Orders", icon: <MdShoppingCart />, to: "/admin/orders" },
     { id: 4, title: "Users", icon: <MdPeople />, to: "/admin/users" },
     { id: 5, title: "Customuse", icon: <MdDashboardCustomize />, to: "/admin/customuse" },
-    { id: 6, title: "Notifications", icon: <IoIosNotifications  />, to: "/admin/notificationsAdmin" },
     { id: 7, title: "Home", icon: <FaPager />, to: "/" },
   ];
 
+  const activeItem = menuItems.find((i) => i.to === location.pathname);
+
   return (
-    <div className="flex h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
-      {/* SIDEBAR */}
-      <div
-        className={`flex flex-col border-r border-border p-3 transition-all duration-300
-        ${open ? "w-64 max-sm:w-50" : "w-20"}`}
+    <div className="flex h-screen overflow-hidden bg-[var(--color-bg)] text-[var(--color-text)]">
+      {/* SIDEBAR — icon rail */}
+      <motion.aside
+        animate={{ width: open ? 236 : 76 }}
+        transition={{ duration: 0.25, ease: "easeInOut" }}
+        className="relative flex shrink-0 flex-col border-r border-[var(--color-border)] bg-[var(--color-card)] py-5"
       >
-        {/* TOP */}
-        <motion.div
-          initial={{ opacity: 0, y: -5 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="mb-6 flex items-center justify-between"
-        >
-          <motion.button
-            onClick={() => setOpen(!open)}
-            className="rounded-lg p-2 text-2xl hover:bg-[var(--color-card)]"
-          >
-            <MdMenu />
-          </motion.button>
-
-          {open && <ThemeToggle />}
-        </motion.div>
-
-        {/* MENU */}
-        <div className="flex flex-1 flex-col gap-2">
-          {menuItems.map((item, index) => (
-            <motion.div
-              key={item.id}
-              onClick={() => navigate(item.to)}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: index * 0.05 }}
-              className={`flex cursor-pointer items-center gap-4 rounded-xl p-3 transition
-                ${
-                  location.pathname === item.to
-                    ? "border-l-2 bg-[var(--color-card)] text-[var(--color-accent)]"
-                    : "text-[var(--color-muted)] hover:bg-[var(--color-card)]"
-                }`}
-            >
-              <span className="text-xl">{item.icon}</span>
-              {open && <span className="font-medium">{item.title}</span>}
-            </motion.div>
-          ))}
+        {/* Logo */}
+        <div className="mb-8 flex items-center gap-3 px-5">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--color-accent)] font-serif text-lg font-bold text-[var(--color-bg)]">
+            M
+          </div>
+          <AnimatePresence>
+            {open && (
+              <motion.span
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0 }}
+                className="font-serif text-lg italic"
+              >
+                Moataz
+              </motion.span>
+            )}
+          </AnimatePresence>
         </div>
 
-        {/* LOGOUT */}
-        <motion.button
-          onClick={async () => {
-            try {
-              await dispatch(logoutUser()).unwrap();
-              window.location.reload();
-              navigate("/");
-            } catch (error) {
-              console.log(error);
-            }
-          }}
-          className="flex items-center gap-4 rounded-xl p-3 text-red-500 transition hover:bg-red-500/10"
+        {/* Collapse handle */}
+        <button
+          onClick={() => setOpen(!open)}
+          className="absolute -right-3 top-8 flex h-6 w-6 items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-card)] text-[var(--color-muted)] shadow-sm hover:text-[var(--color-accent)]"
         >
-          <MdLogout className="text-xl" />
-          {open && <span>Logout</span>}
-        </motion.button>
-      </div>
+          {open ? <MdChevronLeft size={14} /> : <MdChevronRight size={14} />}
+        </button>
 
-      {/* CONTENT */}
-      <div className="flex-1 overflow-auto bg-[var(--color-bg)] p-4">
-        <Outlet />
+        {/* Menu */}
+        <nav className="flex flex-1 flex-col gap-1 px-3">
+          {menuItems.map((item, index) => {
+            const active = location.pathname === item.to;
+            return (
+              <motion.button
+                key={item.id}
+                onClick={() => navigate(item.to)}
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.04 }}
+                className={`group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors ${
+                  active
+                    ? "bg-[var(--color-accent)]/10 text-[var(--color-accent)] font-semibold"
+                    : "text-[var(--color-muted)] hover:bg-[var(--color-bg)] hover:text-[var(--color-text)]"
+                }`}
+              >
+                {active && (
+                  <motion.span
+                    layoutId="sidebarActive"
+                    className="absolute left-0 h-5 w-[3px] rounded-r-full bg-[var(--color-accent)]"
+                  />
+                )}
+                <span className="text-lg">{item.icon}</span>
+                <AnimatePresence>
+                  {open && (
+                    <motion.span
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="whitespace-nowrap"
+                    >
+                      {item.title}
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+
+                {!open && (
+                  <span className="pointer-events-none absolute left-full ml-3 whitespace-nowrap rounded-lg bg-[var(--color-text)] px-2.5 py-1.5 text-xs font-medium text-[var(--color-bg)] opacity-0 shadow-lg transition-opacity group-hover:opacity-100">
+                    {item.title}
+                  </span>
+                )}
+              </motion.button>
+            );
+          })}
+        </nav>
+
+        {/* Logout */}
+        <div className="px-3">
+          <button
+            onClick={async () => {
+              try {
+                await dispatch(logoutUser()).unwrap();
+                window.location.reload();
+                navigate("/");
+              } catch (error) {
+                console.log(error);
+              }
+            }}
+            className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-red-500 transition hover:bg-red-500/10"
+          >
+            <MdLogout className="text-lg" />
+            {open && <span>Logout</span>}
+          </button>
+        </div>
+      </motion.aside>
+
+      {/* MAIN COLUMN */}
+      <div className="flex flex-1 flex-col overflow-hidden">
+        {/* HEADER */}
+        <header className="flex items-center justify-between border-b border-[var(--color-border)] bg-[var(--color-card)] px-5 py-3.5 sm:px-8">
+          <div>
+            <p className="text-[11px] uppercase tracking-[0.14em] text-[var(--color-muted)]">
+              Admin panel
+            </p>
+            <h1 className="font-serif text-lg italic sm:text-xl">
+              {activeItem?.title ?? "Overview"}
+            </h1>
+          </div>
+
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Notification bell — next to theme toggle */}
+            <button
+              onClick={() => navigate("/admin/notificationsAdmin")}
+              className={`relative flex h-9 w-9 items-center justify-center rounded-full border transition-colors ${
+                location.pathname === "/admin/notificationsAdmin"
+                  ? "border-[var(--color-accent)] text-[var(--color-accent)]"
+                  : "border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-text)]"
+              }`}
+              aria-label="Notifications"
+            >
+              <IoIosNotifications size={18} />
+              <motion.span
+                animate={{ opacity: [1, 0.4, 1] }}
+                transition={{ duration: 1.6, repeat: Infinity }}
+                className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]"
+              />
+            </button>
+
+            <ThemeToggle />
+          </div>
+        </header>
+
+        {/* CONTENT */}
+        <div className="flex-1 overflow-auto bg-[var(--color-bg)] p-4 sm:p-6">
+          <Outlet />
+        </div>
       </div>
     </div>
   );

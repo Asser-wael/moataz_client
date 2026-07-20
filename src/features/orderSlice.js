@@ -1,288 +1,141 @@
+// features/orderSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../api/api";
 import { setNotification } from "./notificationSlice";
 import { clearCart } from "./cartSlice";
 
-export const getAdminOrders = createAsyncThunk(
-    "order/getAdminOrders",
-    async (_, { rejectWithValue }) => {
-        try {
-            const res = await api.get("/admin/orders");
-            return res.data;
-        } catch (err) {
-            return rejectWithValue(err.response?.data);
-        }
-    }
-);
-
-export const getOrderById = createAsyncThunk(
-    "order/getOrderById",
-    async (id, { rejectWithValue }) => {
-        try {
-            const res = await api.get(`/admin/orders/${id}`);
-            return res.data;
-        } catch (err) {
-            return rejectWithValue(err.response?.data);
-        }
-    }
-);
-
-export const checkOut = createAsyncThunk(
-    "order/checkOut",
-    async (formData, { rejectWithValue, dispatch }) => {
-        try {
-            let cart = null;
-            let cartP = [];
-            try {
-                cart = localStorage.getItem("cart");
-                cartP = cart ? JSON.parse(cart) : [];
-            } catch (err) {
-                console.error("Failed to read/parse cart from localStorage:", err);
-                cart = null;
-                cartP = [];
-            }
-
-            if (!cart || cart.length === 0) {
-                try {
-                    dispatch(
-                        setNotification({
-                            message: "The cart is empty",
-                            type: "error",
-                        })
-                    );
-                } catch (err) {
-                    console.error("setNotification dispatch error:", err);
-                }
-                return rejectWithValue("Cart is empty");
-            }
-
-            try {
-                formData.append("cart", cart);
-            } catch (err) {
-                console.error("Failed to append cart to formData:", err);
-                return rejectWithValue("Failed to prepare checkout data");
-            }
-
-            const res = await api.post("/checkOut", formData);
-
-            let oldOrders = [];
-            try {
-                oldOrders = JSON.parse(localStorage.getItem("orderTracking")) || [];
-            } catch (err) {
-                console.error("Failed to parse orderTracking from localStorage:", err);
-                oldOrders = [];
-            }
-
-            const newOrder = {
-                orderId: res.data.order._id,
-                cart,
-                status: "pending",
-                time: new Date().toISOString(),
-            };
-            oldOrders.push(newOrder);
-
-            try {
-                localStorage.setItem(
-                    "orderTracking",
-                    JSON.stringify(oldOrders)
-                );
-            } catch (err) {
-                console.error("Failed to save orderTracking to localStorage:", err);
-            }
-
-            try {
-                dispatch(
-                    setNotification({
-                        message: res.data.message,
-                        type: res.data.type,
-                    })
-                );
-            } catch (err) {
-                console.error("setNotification dispatch error:", err);
-            }
-
-            try {
-                dispatch(clearCart());
-            } catch (err) {
-                console.error("clearCart dispatch error:", err);
-            }
-
-            return { order: res.data.order, newOrder };
-        } catch (error) {
-            return rejectWithValue(error.response?.data);
-        }
-    }
-);
-
-export const updateOrderStatus = createAsyncThunk(
-    "order/updateOrderStatus",
-    async ({ id, status }, { rejectWithValue, dispatch }) => {
-        try {
-            const res = await api.put("/updateOrderStatus", { id, status });
-
-            try {
-                dispatch(
-                    setNotification({
-                        message: res.data.message,
-                        type: res.data.type,
-                    })
-                );
-            } catch (err) {
-                console.error("setNotification dispatch error:", err);
-            }
-
-            try {
-                dispatch(clearCart());
-            } catch (err) {
-                console.error("clearCart dispatch error:", err);
-            }
-
-            return res.data.order;
-        } catch (error) {
-            return rejectWithValue(error.response?.data);
-        }
-    }
-);
-
-const getInitialOrderTracking = () => {
-    try {
-        return JSON.parse(localStorage.getItem("orderTracking")) || [];
-    } catch (err) {
-        console.error("Failed to parse initial orderTracking:", err);
-        return [];
-    }
-};
-
-const orderSlice = createSlice({
-    name: "orderSlice",
-
-    initialState: {
-        orders: [],
-        OrderTracking: getInitialOrderTracking(),
-        order: null,
-        loading: false,
-        error: null,
-    },
-
-    reducers: {
-        updateTracking(state, action) {
-            try {
-                const { orderId, status } = action.payload;
-
-                state.OrderTracking = state.OrderTracking.map((order) =>
-                    order.orderId === orderId
-                        ? { ...order, status }
-                        : order
-                );
-
-                try {
-                    localStorage.setItem(
-                        "orderTracking",
-                        JSON.stringify(state.OrderTracking)
-                    );
-                } catch (err) {
-                    console.error("Failed to save orderTracking to localStorage:", err);
-                }
-            } catch (err) {
-                console.error("updateTracking reducer error:", err);
-            }
-        },
-    },
-
-extraReducers: (builder) => {
-    builder
-
-        // =========================
-        // Checkout
-        // =========================
-        .addCase(checkOut.pending, (state) => {
-            state.loading = true;
-            state.error = null;
-        })
-
-        .addCase(checkOut.fulfilled, (state, action) => {
-            state.loading = false;
-            state.error = null;
-
-            if (action.payload?.newOrder) {
-                state.OrderTracking.push(action.payload.newOrder);
-            }
-        })
-
-        .addCase(checkOut.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.payload || action.error.message;
-        })
-
-        // =========================
-        // Get Admin Orders
-        // =========================
-        .addCase(getAdminOrders.pending, (state) => {
-            state.loading = true;
-            state.error = null;
-        })
-
-        .addCase(getAdminOrders.fulfilled, (state, action) => {
-            state.loading = false;
-            state.orders = action.payload;
-        })
-
-        .addCase(getAdminOrders.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.payload || action.error.message;
-        })
-
-        // =========================
-        // Get Order By Id
-        // =========================
-        .addCase(getOrderById.pending, (state) => {
-            state.loading = true;
-            state.error = null;
-        })
-
-        .addCase(getOrderById.fulfilled, (state, action) => {
-            state.loading = false;
-            state.order = action.payload;
-        })
-
-        .addCase(getOrderById.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.payload || action.error.message;
-        })
-
-        // =========================
-        // Update Order Status
-        // =========================
-        .addCase(updateOrderStatus.pending, (state) => {
-            state.loading = true;
-            state.error = null;
-        })
-
-        .addCase(updateOrderStatus.fulfilled, (state, action) => {
-            state.loading = false;
-
-            const index = state.orders.findIndex(
-                (o) => o._id === action.payload._id
-            );
-
-            if (index !== -1) {
-                state.orders[index] = action.payload;
-            }
-
-            if (
-                state.order &&
-                state.order._id === action.payload._id
-            ) {
-                state.order = action.payload;
-            }
-        })
-
-        .addCase(updateOrderStatus.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.payload || action.error.message;
-        });
-}
+// 1. جلب كل الطلبات (للآدمن)
+export const getAdminOrders = createAsyncThunk("order/getAdminOrders", async (_, { rejectWithValue }) => {
+  try {
+    const res = await api.get("/admin/orders");
+    return res.data;
+  } catch (err) {
+    return rejectWithValue(err.response?.data);
+  }
 });
 
-export const { updateTracking } = orderSlice.actions;
+// 2. جلب تفاصيل طلب محدد برقم الـ ID (للآدمن)
+export const getOrderById = createAsyncThunk("order/getOrderById", async (id, { rejectWithValue }) => {
+  try {
+    const res = await api.get(`/admin/orders/${id}`);
+    return res.data;
+  } catch (err) {
+    return rejectWithValue(err.response?.data);
+  }
+});
+
+// 3. جلب طلبات المستخدم الحالي المسجل
+export const getUserOrders = createAsyncThunk("order/getUserOrders", async (_, { rejectWithValue }) => {
+  try {
+    const res = await api.get("/my-orders");
+    return res.data.data;
+  } catch (err) {
+    return rejectWithValue(err.response?.data);
+  }
+});
+
+// 4. إرسال طلب جديد (Checkout) يدعم المسجل والزائر
+export const checkOut = createAsyncThunk("order/checkOut", async (formData, { rejectWithValue, dispatch }) => {
+  try {
+    const token = localStorage.getItem("accessToken");
+
+    // إذا كان زائر (Guest): نأخذ السلة من المتصفح ونرفقها بالـ Form
+    if (!token) {
+      const localCart = localStorage.getItem("cart");
+      if (!localCart || JSON.parse(localCart).length === 0) {
+        dispatch(setNotification({ message: "السلة فارغة حالياً", type: "error" }));
+        return rejectWithValue("Cart is empty");
+      }
+      formData.append("cart", localCart);
+    }
+
+    // إرسال البيانات للسيرفر (Multipart FormData تشمل الصورة)
+    const res = await api.post("/checkOut", formData);
+    
+    // حفظ الأوردر محلياً لتسهيل التتبع بدون تسجيل حساب
+    const trackingOrders = JSON.parse(localStorage.getItem("orderTracking")) || [];
+    const newOrder = {
+      orderId: res.data.order._id,
+      status: "pending",
+      time: new Date().toISOString()
+    };
+    trackingOrders.push(newOrder);
+    localStorage.setItem("orderTracking", JSON.stringify(trackingOrders));
+
+    // تنبيهات وتهيئة التطبيق بعد النجاح
+    dispatch(setNotification({ message: res.data.message, type: res.data.type }));
+    dispatch(clearCart());
+    if (token) dispatch(getUserOrders()); // تحديث قائمة الطلبات لو كان مسجل
+
+    return { order: res.data.order, newOrder };
+  } catch (err) {
+    return rejectWithValue(err.response?.data);
+  }
+});
+
+// 5. تحديث حالة الطلب (من الآدمن)
+export const updateOrderStatus = createAsyncThunk("order/updateOrderStatus", async ({ id, status }, { rejectWithValue, dispatch }) => {
+  try {
+    const res = await api.put("/updateOrderStatus", { id, status });
+    dispatch(setNotification({ message: res.data.message, type: res.data.type }));
+    return res.data.order;
+  } catch (err) {
+    return rejectWithValue(err.response?.data);
+  }
+});
+
+// دالة مساعدة لقراءة التتبع المحلي عند بدء التشغيل
+const getInitialTracking = () => JSON.parse(localStorage.getItem("orderTracking")) || [];
+
+const orderSlice = createSlice({
+  name: "orderSlice",
+  initialState: {
+    orders: [],            // للآدمن
+    userOrders: [],        // لليوزر المسجل
+    OrderTracking: getInitialTracking(), // للزوار
+    id:null,
+    order: null,           // تفاصيل أوردر مفرد
+    loading: false,
+    error: null,
+  },
+  reducers: {
+    updateTracking(state, action) {
+      const { orderId, status } = action.payload;
+      state.OrderTracking = state.OrderTracking.map(o => o.orderId === orderId ? { ...o, status } : o);
+      localStorage.setItem("orderTracking", JSON.stringify(state.OrderTracking));
+    },
+    setOrderView(state, action) {
+      state.id = action.payload
+    }
+  },
+  extraReducers: (builder) => {
+    builder
+      // Checkout
+      .addCase(checkOut.pending, (state) => { state.loading = true; })
+      .addCase(checkOut.fulfilled, (state, action) => {
+        state.loading = false;
+        if (action.payload?.newOrder) state.OrderTracking.push(action.payload.newOrder);
+      })
+      .addCase(checkOut.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
+      
+      // Get Admin Orders
+      .addCase(getAdminOrders.fulfilled, (state, action) => { state.orders = action.payload;  console.log(state.orders);
+      })
+      
+      // Get User Orders
+      .addCase(getUserOrders.fulfilled, (state, action) => { state.userOrders = action.payload; })
+      
+      // Update Status
+      .addCase(updateOrderStatus.fulfilled, (state, action) => {
+        state.loading = false;
+        const idx = state.orders.findIndex(o => o._id === action.payload._id);
+        if (idx !== -1) state.orders[idx] = action.payload;
+        
+        const uIdx = state.userOrders.findIndex(o => o._id === action.payload._id);
+        if (uIdx !== -1) state.userOrders[uIdx] = action.payload;
+      });
+  }
+});
+
+export const { updateTracking , setOrderView} = orderSlice.actions;
 export default orderSlice.reducer;

@@ -6,6 +6,10 @@ import { setNotification } from "./notificationSlice"
 // api url 
 const API_URL = import.meta.env.VITE_API_URL;
 
+
+
+
+
 // Register
 export const registerUser = createAsyncThunk(
     "auth/register", async (formData, { rejectWithValue, dispatch }) => {
@@ -33,10 +37,74 @@ export const registerUser = createAsyncThunk(
         }
     })
 
+// Verify Email
+export const verifyEmail = createAsyncThunk(
+    "auth/verifyEmail", async (data, { rejectWithValue, dispatch }) => {
+        try {
+            const res = await axios.post(`${API_URL}/verify-email`, data)
+
+            try {
+                dispatch(
+                    setNotification({
+                        message: res.data.message,
+                        type: res.data.type,
+                    })
+                );
+            } catch (err) {
+                console.error("setNotification dispatch error:", err);
+            }
+
+            return res.data
+
+        } catch (error) {
+            return rejectWithValue({
+                data: error.response?.data,
+                status: error.response?.status,
+            });
+        }
+    })
+
+// Resend OTP
+export const resendOtp = createAsyncThunk(
+    "auth/resendOtp", async (_, { rejectWithValue, dispatch }) => {
+        try {
+            const res = await api.post(`/resend-otp`)
+
+            try {
+                dispatch(
+                    setNotification({
+                        message: res.data.message,
+                        type: res.data.type,
+                    })
+                );
+            } catch (err) {
+                console.error("setNotification dispatch error:", err);
+            }
+
+            return res.data
+
+        } catch (error) {
+            try {
+                dispatch(
+                    setNotification({
+                        message: error.response?.data?.message || "Failed to resend code",
+                        type: "error",
+                    })
+                );
+            } catch (err) {
+                console.error("setNotification dispatch error:", err);
+            }
+
+            return rejectWithValue({
+                data: error.response?.data,
+                status: error.response?.status,
+            });
+        }
+    })
+
 export const loginUser = createAsyncThunk(
     "auth/login", async (formData, { rejectWithValue, dispatch }) => {
         try {
-
             const res = await axios.post(`${API_URL}/login`, formData, {
                 withCredentials: true
             });
@@ -57,14 +125,14 @@ export const loginUser = createAsyncThunk(
             } catch (err) {
                 console.error("setNotification dispatch error:", err);
             }
-
+            localStorage.removeItem("cart")
             try {
-                await dispatch(getUser())
+                await dispatch(getUser());
             } catch (err) {
                 console.error("getUser dispatch error:", err);
             }
 
-            return res.data
+            return res.data;
         }
         catch (error) {
             return rejectWithValue({
@@ -157,6 +225,8 @@ const authSlice = createSlice({
         loadingRegister: false,
         loadingLogin: false,
         loadingUser: false,
+        loadingVerify: false,
+        loadingResendOtp: false,
 
         error: null,
     },
@@ -176,6 +246,36 @@ const authSlice = createSlice({
 
             .addCase(registerUser.rejected, (state, action) => {
                 state.loadingRegister = false;
+                state.error = action.payload;
+            })
+
+            /* Verify Email */
+
+            .addCase(verifyEmail.pending, (state) => {
+                state.loadingVerify = true;
+            })
+
+            .addCase(verifyEmail.fulfilled, (state) => {
+                state.loadingVerify = false;
+            })
+
+            .addCase(verifyEmail.rejected, (state, action) => {
+                state.loadingVerify = false;
+                state.error = action.payload;
+            })
+
+            /* Resend OTP */
+
+            .addCase(resendOtp.pending, (state) => {
+                state.loadingResendOtp = true;
+            })
+
+            .addCase(resendOtp.fulfilled, (state) => {
+                state.loadingResendOtp = false;
+            })
+
+            .addCase(resendOtp.rejected, (state, action) => {
+                state.loadingResendOtp = false;
                 state.error = action.payload;
             })
 
