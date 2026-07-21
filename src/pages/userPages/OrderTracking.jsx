@@ -58,14 +58,14 @@ export default function OrderTracking() {
 
               return (
                 <div
-                  key={order._id || index}
+                  key={order.orderId || index}
                   className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden"
                 >
                   {/* Header */}
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-5 border-b border-[var(--color-border)]">
                     <div>
                       <h2 className="font-bold text-lg">
-                        Order #{order._id ? order._id.slice(-6) : index + 1}
+                        Order #{order.orderId ? order.orderId.slice(-6) : index + 1}
                       </h2>
                       <p className="text-sm text-[var(--color-muted)] mt-1">
                         {order?.createdAt ? new Date(order.createdAt).toLocaleString() : "Unknown Date"}

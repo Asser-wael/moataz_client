@@ -35,7 +35,7 @@ export const checkOut = createAsyncThunk("order/checkOut", async (formData, { re
   try {
     const token = localStorage.getItem("accessToken");
 
-  
+
     if (!token) {
       const localCart = localStorage.getItem("cart");
       if (!localCart || JSON.parse(localCart).length === 0) {
@@ -46,10 +46,13 @@ export const checkOut = createAsyncThunk("order/checkOut", async (formData, { re
     }
 
     const res = await api.post("/checkOut", formData);
-    
+
     const trackingOrders = JSON.parse(localStorage.getItem("orderTracking")) || [];
     const newOrder = {
       orderId: res.data.order._id,
+      whats: res.data.order.whats,
+      walletName: res.data.order.walletName,
+      cart: res.data.order.cart,
       status: "pending",
       time: new Date().toISOString()
     };
@@ -81,11 +84,11 @@ const getInitialTracking = () => JSON.parse(localStorage.getItem("orderTracking"
 const orderSlice = createSlice({
   name: "orderSlice",
   initialState: {
-    orders: [],           
-    userOrders: [],        
-    OrderTracking: getInitialTracking(), 
-    id:null,
-    order: null,           
+    orders: [],
+    userOrders: [],
+    OrderTracking: getInitialTracking(),
+    id: null,
+    order: null,
     loading: false,
     error: null,
   },
@@ -108,25 +111,26 @@ const orderSlice = createSlice({
         if (action.payload?.newOrder) state.OrderTracking.push(action.payload.newOrder);
       })
       .addCase(checkOut.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
-      
+
       // Get Admin Orders
-      .addCase(getAdminOrders.fulfilled, (state, action) => { state.orders = action.payload;  console.log(state.orders);
+      .addCase(getAdminOrders.fulfilled, (state, action) => {
+        state.orders = action.payload; console.log(state.orders);
       })
-      
+
       // Get User Orders
       .addCase(getUserOrders.fulfilled, (state, action) => { state.userOrders = action.payload; })
-      
+
       // Update Status
       .addCase(updateOrderStatus.fulfilled, (state, action) => {
         state.loading = false;
         const idx = state.orders.findIndex(o => o._id === action.payload._id);
         if (idx !== -1) state.orders[idx] = action.payload;
-        
+
         const uIdx = state.userOrders.findIndex(o => o._id === action.payload._id);
         if (uIdx !== -1) state.userOrders[uIdx] = action.payload;
       });
   }
 });
 
-export const { updateTracking , setOrderView} = orderSlice.actions;
+export const { updateTracking, setOrderView } = orderSlice.actions;
 export default orderSlice.reducer;
