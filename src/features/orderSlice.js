@@ -4,7 +4,6 @@ import api from "../api/api";
 import { setNotification } from "./notificationSlice";
 import { clearCart } from "./cartSlice";
 
-// 1. جلب كل الطلبات (للآدمن)
 export const getAdminOrders = createAsyncThunk("order/getAdminOrders", async (_, { rejectWithValue }) => {
   try {
     const res = await api.get("/admin/orders");
@@ -14,7 +13,6 @@ export const getAdminOrders = createAsyncThunk("order/getAdminOrders", async (_,
   }
 });
 
-// 2. جلب تفاصيل طلب محدد برقم الـ ID (للآدمن)
 export const getOrderById = createAsyncThunk("order/getOrderById", async (id, { rejectWithValue }) => {
   try {
     const res = await api.get(`/admin/orders/${id}`);
@@ -24,7 +22,6 @@ export const getOrderById = createAsyncThunk("order/getOrderById", async (id, { 
   }
 });
 
-// 3. جلب طلبات المستخدم الحالي المسجل
 export const getUserOrders = createAsyncThunk("order/getUserOrders", async (_, { rejectWithValue }) => {
   try {
     const res = await api.get("/my-orders");
@@ -34,12 +31,11 @@ export const getUserOrders = createAsyncThunk("order/getUserOrders", async (_, {
   }
 });
 
-// 4. إرسال طلب جديد (Checkout) يدعم المسجل والزائر
 export const checkOut = createAsyncThunk("order/checkOut", async (formData, { rejectWithValue, dispatch }) => {
   try {
     const token = localStorage.getItem("accessToken");
 
-    // إذا كان زائر (Guest): نأخذ السلة من المتصفح ونرفقها بالـ Form
+  
     if (!token) {
       const localCart = localStorage.getItem("cart");
       if (!localCart || JSON.parse(localCart).length === 0) {
@@ -49,10 +45,8 @@ export const checkOut = createAsyncThunk("order/checkOut", async (formData, { re
       formData.append("cart", localCart);
     }
 
-    // إرسال البيانات للسيرفر (Multipart FormData تشمل الصورة)
     const res = await api.post("/checkOut", formData);
     
-    // حفظ الأوردر محلياً لتسهيل التتبع بدون تسجيل حساب
     const trackingOrders = JSON.parse(localStorage.getItem("orderTracking")) || [];
     const newOrder = {
       orderId: res.data.order._id,
@@ -62,10 +56,9 @@ export const checkOut = createAsyncThunk("order/checkOut", async (formData, { re
     trackingOrders.push(newOrder);
     localStorage.setItem("orderTracking", JSON.stringify(trackingOrders));
 
-    // تنبيهات وتهيئة التطبيق بعد النجاح
     dispatch(setNotification({ message: res.data.message, type: res.data.type }));
     dispatch(clearCart());
-    if (token) dispatch(getUserOrders()); // تحديث قائمة الطلبات لو كان مسجل
+    if (token) dispatch(getUserOrders());
 
     return { order: res.data.order, newOrder };
   } catch (err) {
@@ -73,7 +66,6 @@ export const checkOut = createAsyncThunk("order/checkOut", async (formData, { re
   }
 });
 
-// 5. تحديث حالة الطلب (من الآدمن)
 export const updateOrderStatus = createAsyncThunk("order/updateOrderStatus", async ({ id, status }, { rejectWithValue, dispatch }) => {
   try {
     const res = await api.put("/updateOrderStatus", { id, status });
@@ -84,17 +76,16 @@ export const updateOrderStatus = createAsyncThunk("order/updateOrderStatus", asy
   }
 });
 
-// دالة مساعدة لقراءة التتبع المحلي عند بدء التشغيل
 const getInitialTracking = () => JSON.parse(localStorage.getItem("orderTracking")) || [];
 
 const orderSlice = createSlice({
   name: "orderSlice",
   initialState: {
-    orders: [],            // للآدمن
-    userOrders: [],        // لليوزر المسجل
-    OrderTracking: getInitialTracking(), // للزوار
+    orders: [],           
+    userOrders: [],        
+    OrderTracking: getInitialTracking(), 
     id:null,
-    order: null,           // تفاصيل أوردر مفرد
+    order: null,           
     loading: false,
     error: null,
   },
