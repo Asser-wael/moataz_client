@@ -151,11 +151,11 @@ export const getUser = createAsyncThunk(
             } catch (err) {
                 console.error("Failed to read accessToken from localStorage:", err);
             }
-
-            // if (token) {
-
-            const res = await api.get(`/user`)
-            // }
+            try {
+                const res = await api.get(`/user`)
+            } catch (err) {
+                console.error("Failed to read accessToken from localStorage:", err);
+            }
             return res.data
         }
         catch (error) {
@@ -171,7 +171,6 @@ export const logoutUser = createAsyncThunk(
     "auth/logout",
     async (_, { rejectWithValue }) => {
         try {
-            // امسح الـ subscription من الـ backend قبل الـ logout
             try {
                 const reg = await navigator.serviceWorker.getRegistration();
                 if (reg) {

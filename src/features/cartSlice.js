@@ -232,7 +232,6 @@ const cartSlice = createSlice({
     },
 
     reducers: {
-        // بيتنادى وقت اللوج آوت عشان يفضّي الكارت من الـ state بس (من غير كول للسيرفر)
         resetCartState: (state) => {
             state.cart = [];
         },

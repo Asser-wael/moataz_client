@@ -21,7 +21,7 @@ const dashboardSlice = createSlice({
   name: "dashboardSlice",
 
   initialState: {
-    todayData: null,   // { revenue, orders, users, products, pendingOrders, avgOrderValue, returnRate, chart[] }
+    todayData: null,
     monthData: null,
     yearData: null,
     type: "month",   // "day" | "month" | "year"

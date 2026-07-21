@@ -13,7 +13,6 @@ export default function OrderTracking() {
     if (reduxTracking) {
       setTracking(reduxTracking);
     }
-    console.log(reduxTracking);
     
   }, [reduxTracking]);
 
