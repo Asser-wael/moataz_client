@@ -143,29 +143,20 @@ export const loginUser = createAsyncThunk(
     })
 
 export const getUser = createAsyncThunk(
-    "auth/getUser", async (_, { rejectWithValue }) => {
+    "auth/getUser",
+    async (_, { rejectWithValue }) => {
         try {
-            let token = null;
-            try {
-                token = localStorage.getItem("accessToken");
-            } catch (err) {
-                console.error("Failed to read accessToken from localStorage:", err);
-            }
-            try {
-                const res = await api.get(`/user`)
-            } catch (err) {
-                console.error("Failed to read accessToken from localStorage:", err);
-            }
-            return res.data
-        }
-        catch (error) {
+            const res = await api.get(`/user`);
+            return res.data;
+
+        } catch (error) {
             return rejectWithValue({
                 data: error.response?.data,
                 status: error.response?.status,
             });
         }
     }
-)
+);
 ///////////////
 export const logoutUser = createAsyncThunk(
     "auth/logout",
