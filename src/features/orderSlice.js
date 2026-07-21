@@ -53,6 +53,7 @@ export const checkOut = createAsyncThunk("order/checkOut", async (formData, { re
       whats: res.data.order.whats,
       walletName: res.data.order.walletName,
       cart: res.data.order.cart,
+      totalPrice: res.data.order.totalPrice,
       status: "pending",
       time: new Date().toISOString()
     };
