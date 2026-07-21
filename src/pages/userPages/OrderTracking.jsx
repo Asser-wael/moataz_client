@@ -68,7 +68,7 @@ export default function OrderTracking() {
                         Order #{order.orderId ? order.orderId.slice(-6) : index + 1}
                       </h2>
                       <p className="text-sm text-[var(--color-muted)] mt-1">
-                        {order?.createdAt ? new Date(order.createdAt).toLocaleString() : "Unknown Date"}
+                        {order?.time ? new Date(order.time).toLocaleString() : "Unknown Date"}
                       </p>
                     </div>
 
