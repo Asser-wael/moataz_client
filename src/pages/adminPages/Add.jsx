@@ -237,6 +237,7 @@ export default function Add() {
                                     <option value="Shooter">Shooter (FPS/TPS)</option>
                                     <option value="Survival">Survival</option>
                                     <option value="Platformer">Platformer</option>
+                                    <option value="Horror">Horror</option>
 
                                 </select>
                             </div>
