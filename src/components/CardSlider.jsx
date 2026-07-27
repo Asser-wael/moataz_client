@@ -109,7 +109,7 @@ export default function CardSlider() {
             : null;
 
           return (
-            <SwiperSlide key={product._id} className="!w-[400px] sm:!w-[500px]">
+            <SwiperSlide key={product._id} className="!w-[400px] sm:!w-[500px] px-4 ">
               <motion.div
                 whileHover={{ y: -4 }}
                 transition={{ duration: 0.3 }}
@@ -117,7 +117,7 @@ export default function CardSlider() {
                 className="group flex h-full cursor-pointer items-stretch overflow-hidden rounded-3xl border border-[var(--color-border)] bg-[var(--color-card)] transition-colors hover:border-[var(--color-accent)]/50 hover:shadow-[0_16px_40px_-16px_var(--color-accent)]"
               >
                 {/* الصورة - مربعة صغيرة على الشمال */}
-                <div className="relative w-40 shrink-0 overflow-hidden bg-[var(--color-bg)] sm:w-36">
+                <div className="relative w-50 shrink-0 overflow-hidden bg-[var(--color-bg)] sm:w-40">
                   <img
                     src={`${import.meta.env.VITE_API_URL}/uploads/${product.image}`}
                     alt={product.name}
