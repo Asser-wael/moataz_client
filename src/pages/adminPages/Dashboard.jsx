@@ -360,7 +360,7 @@ export default function Dashboard() {
                 </tr>
               </thead>
 
-              {/* <tbody>
+              <tbody>
                 {allOrders?.slice(0, 5).map((o, i) => (
                   <motion.tr
                     key={o._id}
@@ -371,7 +371,7 @@ export default function Dashboard() {
                     className="cursor-pointer border-b border-border transition-colors hover:bg-[var(--color-bg)]"
                   >
                     <td className="whitespace-nowrap px-3 py-3 text-sm font-medium text-text sm:px-5 sm:py-4">
-                       {o.shippingAddress?.fullName}
+                      {o.walletName || o.whats || "—"}
                     </td>
 
                     <td className="whitespace-nowrap px-3 py-3 text-sm font-semibold text-[var(--color-accent)] sm:px-5 sm:py-4">
@@ -393,7 +393,7 @@ export default function Dashboard() {
                     </td>
                   </motion.tr>
                 ))}
-              </tbody> */}
+              </tbody>
             </table>
           </div>
         </div>
