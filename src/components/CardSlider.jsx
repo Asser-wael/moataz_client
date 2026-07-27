@@ -109,7 +109,7 @@ export default function CardSlider() {
             : null;
 
           return (
-            <SwiperSlide key={product._id} className="!w-[400px] sm:!w-[500px] px-4 ">
+            <SwiperSlide key={product._id} className=" px-4 ">
               <motion.div
                 whileHover={{ y: -4 }}
                 transition={{ duration: 0.3 }}
