@@ -122,7 +122,7 @@ export default function CardSlider() {
                     src={`${import.meta.env.VITE_API_URL}/uploads/${product.image}`}
                     alt={product.name}
                     onError={(e) => (e.target.src = FALLBACK_IMAGE)}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="h-full w-full object-cover aspect-video  transition-transform duration-500 group-hover:scale-110"
                   />
                   {hasOffer && (
                     <span className="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-[var(--color-accent)] px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-white shadow-lg">
