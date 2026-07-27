@@ -69,7 +69,13 @@ export default function CardSlider() {
   if (!offers.length) return null;
 
   return (
-    <div className="relative w-full py-10">
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="relative w-full py-10"
+    >
       {/* الرأس */}
       <div className="flex w-full items-end justify-between mb-8 px-1">
         <div>
@@ -85,22 +91,20 @@ export default function CardSlider() {
           <button
             ref={prevRef}
             aria-label="Previous"
-            className={`p-3 rounded-full border border-[var(--color-border)] text-[var(--color-text)] transition-all duration-300 ${
-              canScrollLeft
-                ? "opacity-100 hover:bg-[var(--color-text)] hover:text-[var(--color-bg)] cursor-pointer"
-                : "opacity-30 cursor-not-allowed"
-            }`}
+            className={`p-3 rounded-full border border-[var(--color-border)] text-[var(--color-text)] transition-all duration-300 ${canScrollLeft
+              ? "opacity-100 hover:bg-[var(--color-text)] hover:text-[var(--color-bg)] cursor-pointer"
+              : "opacity-30 cursor-not-allowed"
+              }`}
           >
             <FaChevronLeft size={14} />
           </button>
           <button
             ref={nextRef}
             aria-label="Next"
-            className={`p-3 rounded-full border border-[var(--color-border)] text-[var(--color-text)] transition-all duration-300 ${
-              canScrollRight
-                ? "opacity-100 hover:bg-[var(--color-text)] hover:text-[var(--color-bg)] cursor-pointer"
-                : "opacity-30 cursor-not-allowed"
-            }`}
+            className={`p-3 rounded-full border border-[var(--color-border)] text-[var(--color-text)] transition-all duration-300 ${canScrollRight
+              ? "opacity-100 hover:bg-[var(--color-text)] hover:text-[var(--color-bg)] cursor-pointer"
+              : "opacity-30 cursor-not-allowed"
+              }`}
           >
             <FaChevronRight size={14} />
           </button>
@@ -228,6 +232,6 @@ export default function CardSlider() {
           );
         })}
       </Swiper>
-    </div>
+    </motion.div>
   );
 }

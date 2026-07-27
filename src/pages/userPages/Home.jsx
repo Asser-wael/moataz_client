@@ -184,7 +184,7 @@ export default function Home() {
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, margin: "-100px" }}
-        className="py-6 border-b border-[var(--color-border)] card-bg-soft"
+        className="p-6 border-b border-[var(--color-border)] card-bg-soft"
       >
         <CardSlider />
       </motion.section>
