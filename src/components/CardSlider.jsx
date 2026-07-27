@@ -109,7 +109,7 @@ export default function CardSlider() {
             : null;
 
           return (
-            <SwiperSlide key={product._id} className="!w-[340px] sm:!w-[400px]">
+            <SwiperSlide key={product._id} className="!w-[400px] sm:!w-[500px]">
               <motion.div
                 whileHover={{ y: -4 }}
                 transition={{ duration: 0.3 }}
@@ -133,7 +133,7 @@ export default function CardSlider() {
                 </div>
 
                 {/* التفاصيل - على اليمين */}
-                <div className="flex flex-1 flex-col justify-between p-4">
+                <div className="flex flex-1 flex-col justify-between p-4 opacity-80">
                   <div>
                     <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)]">
                       {categoryIcon(product.Category)}
