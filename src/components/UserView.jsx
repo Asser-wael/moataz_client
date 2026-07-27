@@ -148,7 +148,8 @@ export default function UserView() {
                 </button>
             </div>
 
-            <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 items-center">
+            {/* items-start (بدل items-center) عشان عمود الصورة ميتزنقش في النص لما عمود التفاصيل يطول */}
+            <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 items-start">
                 {/* ================= IMAGE ================= */}
                 <motion.div
                     initial={{ opacity: 0, x: -60 }}
@@ -159,6 +160,7 @@ export default function UserView() {
                     border border-green-500/20
                     bg-zinc-900
                     shadow-[0_0_40px_rgba(34,197,94,0.12)]
+                    lg:sticky lg:top-24 lg:self-start
                     "
                 >
                     {view.Category && (
