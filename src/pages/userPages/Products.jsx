@@ -120,8 +120,8 @@ export default function Products() {
             whileTap={{ scale: 0.95 }}
             onClick={() => dispatch(setCat("All"))}
             className={`rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors ${cat === "All"
-                ? "border-[var(--color-accent)] bg-[var(--color-accent)] text-white shadow-[0_0_16px_-4px_var(--color-accent)]"
-                : "card-bg-soft border-[var(--color-border)] text-[var(--color-text)] hover:border-[var(--color-accent)]"
+              ? "border-[var(--color-accent)] bg-[var(--color-accent)] text-white shadow-[0_0_16px_-4px_var(--color-accent)]"
+              : "card-bg-soft border-[var(--color-border)] text-[var(--color-text)] hover:border-[var(--color-accent)]"
               }`}
           >
             All
@@ -141,8 +141,8 @@ export default function Products() {
                 whileTap={{ scale: 0.95 }}
                 onClick={() => dispatch(setCat(category.name))}
                 className={`rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors ${cat === category.name
-                    ? "border-[var(--color-accent)] bg-[var(--color-accent)] text-white shadow-[0_0_16px_-4px_var(--color-accent)]"
-                    : "card-bg-soft border-[var(--color-border)] text-[var(--color-text)] hover:border-[var(--color-accent)]"
+                  ? "border-[var(--color-accent)] bg-[var(--color-accent)] text-white shadow-[0_0_16px_-4px_var(--color-accent)]"
+                  : "card-bg-soft border-[var(--color-border)] text-[var(--color-text)] hover:border-[var(--color-accent)]"
                   }`}
               >
                 {category.name}
@@ -189,7 +189,7 @@ export default function Products() {
                       src={`${import.meta.env.VITE_API_URL}/uploads/${product.image}`}
                       alt={product.name}
                       onError={(e) => (e.target.src = FALLBACK_IMAGE)}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
 
@@ -233,7 +233,7 @@ export default function Products() {
                       onClick={() => dispatch(setView(product))}
                       className="line-clamp-1 cursor-pointer text-base font-bold text-[var(--color-text)] transition-colors hover:text-[var(--color-accent)]"
                     >
-                      {product.name}
+                      {product?.name ? product.name.toUpperCase() : "NO NAME"}
                     </h3>
 
                     <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-[var(--color-muted)]">

@@ -73,7 +73,6 @@ export default function Offer() {
   return (
     <div className="min-h-screen bg-[var(--color-bg)]">
       <div className="mx-auto w-full max-w-6xl px-5 py-10 md:px-8">
-        {/* Hero */}
         <motion.div initial="hidden" animate="show" variants={staggerContainer}>
           <motion.span
             variants={fadeUp}
@@ -94,7 +93,6 @@ export default function Offer() {
             Grab premium editions before the timer runs out — same accounts, sharper prices.
           </motion.p>
 
-          {/* Search */}
           <motion.div
             variants={fadeUp}
             className="mt-6 flex w-full max-w-md items-center gap-2 border border-[var(--color-border)] bg-[var(--color-card)]/70 px-4 py-3 transition-colors focus-within:border-[var(--color-accent)]"
@@ -110,7 +108,6 @@ export default function Offer() {
           </motion.div>
         </motion.div>
 
-        {/* Category filter */}
         <div className="mt-6 flex flex-wrap gap-2">
           {categories.map((cat) => (
             <button
@@ -127,7 +124,6 @@ export default function Offer() {
           ))}
         </div>
 
-        {/* Loading */}
         {loadingAllOffers && <Loading />}
 
         {/* Empty */}
@@ -139,7 +135,6 @@ export default function Offer() {
           </div>
         )}
 
-        {/* Grouped by category */}
         {!loadingAllOffers &&
           Object.keys(grouped).map((cat) => (
             <div key={cat} className="mt-14">
@@ -183,7 +178,7 @@ export default function Offer() {
                           "polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%)",
                       }}
                     >
-                      {/* Image — 16:9 */}
+
                       <div className="relative aspect-video w-full overflow-hidden bg-[var(--color-bg)]">
                         <img
                           src={`${import.meta.env.VITE_API_URL}/uploads/${item.image}`}
@@ -192,7 +187,6 @@ export default function Offer() {
                           className="h-full w-full object-cover grayscale-[45%] contrast-110 transition-all duration-500 group-hover:scale-105 group-hover:grayscale-0"
                         />
 
-                        {/* scanline overlay */}
                         <div
                           className="pointer-events-none absolute inset-0 opacity-20 mix-blend-overlay"
                           style={{
@@ -202,7 +196,6 @@ export default function Offer() {
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
 
-                        {/* corner brackets — appear on hover */}
                         {[
                           "left-2 top-2 border-l-2 border-t-2",
                           "right-2 top-2 border-r-2 border-t-2",
@@ -215,7 +208,6 @@ export default function Offer() {
                           />
                         ))}
 
-                        {/* top strip: category / gameplay type */}
                         <div className="absolute inset-x-0 top-0 flex items-center justify-between px-3 py-2">
                           <span className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-white/90">
                             {item.GameplayType}
@@ -227,7 +219,6 @@ export default function Offer() {
                           )}
                         </div>
 
-                        {/* bottom strip: rating */}
                         {rating && (
                           <div className="absolute bottom-2 left-3 flex items-center gap-1 font-mono text-[10px] font-bold text-white">
                             <FaStar className="text-[var(--color-accent)]" size={10} />
@@ -236,7 +227,6 @@ export default function Offer() {
                         )}
                       </div>
 
-                      {/* diagonal accent divider */}
                       <div className="h-[3px] w-full bg-[var(--color-border)]">
                         <div
                           className="h-full bg-[var(--color-accent)] transition-all duration-500"
@@ -244,7 +234,6 @@ export default function Offer() {
                         />
                       </div>
 
-                      {/* Content */}
                       <div className="p-4">
                         <h3 className="line-clamp-1 text-sm font-bold text-[var(--color-text)]">
                           {item.name}
@@ -254,7 +243,6 @@ export default function Offer() {
                           {liveEditions}/{totalEditions} editions live
                         </p>
 
-                        {/* stock gauge */}
                         <div className="mt-2 flex items-center gap-1">
                           {Array.from({ length: STOCK_SEGMENTS }).map((_, i) => (
                             <span
@@ -269,7 +257,6 @@ export default function Offer() {
                           </span>
                         </div>
 
-                        {/* price */}
                         <div className="mt-3 flex items-baseline gap-1.5 border-t border-[var(--color-border)] pt-3 font-mono">
                           {account?.priceOffer > 0 && (
                             <span className="text-[11px] text-[var(--color-muted)] line-through">
