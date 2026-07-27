@@ -6,6 +6,7 @@ import ProtectedRoute from "./ProtectedRoute.jsx";
 
 import ErrorPage from "../components/Error.jsx";
 import Customuse from "../pages/adminPages/Customuse.jsx";
+import AppError from "../components/AppError.jsx";
 
 
 // Auth
@@ -55,11 +56,12 @@ export const AppRoutes = createBrowserRouter([
   {
     path: "/login/verifyEmail",
     element: (
-        <VerifyEmail />
+      <VerifyEmail />
     ),
   },
   {
     path: "/admin",
+    errorElement: <AppError />,
     element: (
       <ProtectedRoute >
         <Layout />
@@ -102,6 +104,7 @@ export const AppRoutes = createBrowserRouter([
   },
   {
     path: "/",
+    errorElement: <AppError />,
     element: <LayoutUser />,
     children: [
       {
@@ -140,8 +143,5 @@ export const AppRoutes = createBrowserRouter([
     element: <ErrorPage />,
   },
 
-  {
-    path: "*",
-    element: <ErrorPage />,
-  },
+
 ]);
