@@ -1,5 +1,4 @@
-//cluade
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { setView } from "../features/usersSlice";
@@ -25,8 +24,22 @@ export default function CardSlider() {
   const dispatch = useDispatch();
   const prevRef = useRef(null);
   const nextRef = useRef(null);
+
+  // خزّنا الـ swiper instance في state عشان نقدر نربط الأزرار بعد ما الـ refs تتعمل mount
+  // (ده اللي كان مخرب الأزرار: onBeforeInit كان بيتنفذ قبل ما prevRef/nextRef يبقوا موجودين)
+  const [swiperInstance, setSwiperInstance] = useState(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+
+  useEffect(() => {
+    if (swiperInstance && prevRef.current && nextRef.current) {
+      swiperInstance.params.navigation.prevEl = prevRef.current;
+      swiperInstance.params.navigation.nextEl = nextRef.current;
+      swiperInstance.navigation.destroy();
+      swiperInstance.navigation.init();
+      swiperInstance.navigation.update();
+    }
+  }, [swiperInstance]);
 
   // السلايدر ده بيعتمد بالكامل على الـ offers الجاية من getOffers
   const { offers = [], loadingoffers } = useSelector((state) => state.customuseSlice);
@@ -62,19 +75,23 @@ export default function CardSlider() {
         <div className="flex gap-2">
           <button
             ref={prevRef}
-            className={`p-3 rounded-full border border-[var(--color-border)] text-[var(--color-text)] transition-all duration-300 ${canScrollLeft
+            aria-label="Previous"
+            className={`p-3 rounded-full border border-[var(--color-border)] text-[var(--color-text)] transition-all duration-300 ${
+              canScrollLeft
                 ? "opacity-100 hover:bg-[var(--color-text)] hover:text-[var(--color-bg)] cursor-pointer"
                 : "opacity-30 cursor-not-allowed"
-              }`}
+            }`}
           >
             <FaChevronLeft size={14} />
           </button>
           <button
             ref={nextRef}
-            className={`p-3 rounded-full border border-[var(--color-border)] text-[var(--color-text)] transition-all duration-300 ${canScrollRight
+            aria-label="Next"
+            className={`p-3 rounded-full border border-[var(--color-border)] text-[var(--color-text)] transition-all duration-300 ${
+              canScrollRight
                 ? "opacity-100 hover:bg-[var(--color-text)] hover:text-[var(--color-bg)] cursor-pointer"
                 : "opacity-30 cursor-not-allowed"
-              }`}
+            }`}
           >
             <FaChevronRight size={14} />
           </button>
@@ -84,11 +101,8 @@ export default function CardSlider() {
       {/* السلايدر بـ Swiper */}
       <Swiper
         modules={[Navigation]}
+        onSwiper={setSwiperInstance}
         navigation={{ prevEl: prevRef.current, nextEl: nextRef.current }}
-        onBeforeInit={(swiper) => {
-          swiper.params.navigation.prevEl = prevRef.current;
-          swiper.params.navigation.nextEl = nextRef.current;
-        }}
         onSlideChange={(swiper) => {
           setCanScrollLeft(!swiper.isBeginning);
           setCanScrollRight(!swiper.isEnd);
@@ -107,38 +121,41 @@ export default function CardSlider() {
             : null;
 
           return (
-            <SwiperSlide key={product._id} className=" px-4 ">
+            <SwiperSlide key={product._id} className="!w-[360px] px-2">
               <motion.div
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.3 }}
+                whileHover={{ y: -6 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
                 onClick={() => dispatch(setView(product))}
-                className="group flex h-full cursor-pointer items-stretch overflow-hidden rounded-3xl border border-[var(--color-border)] bg-[var(--color-card)] transition-colors hover:border-[var(--color-accent)]/50 hover:shadow-[0_16px_40px_-16px_var(--color-accent)]"
+                className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-3xl border border-[var(--color-border)] bg-[var(--color-card)] transition-all duration-300 hover:border-[var(--color-accent)]/60 hover:shadow-[0_20px_45px_-18px_var(--color-accent)]"
               >
-                {/* الصورة - مربعة صغيرة على الشمال */}
-                <div className="relative w-50 aspect-video shrink-0 self-start overflow-hidden bg-[var(--color-bg)] sm:w-40">
+                {/* الصورة - 16:9 كاملة العرض */}
+                <div className="relative aspect-video w-full overflow-hidden bg-[var(--color-bg)]">
                   <img
                     src={`${import.meta.env.VITE_API_URL}/uploads/${product.image}`}
                     alt={product.name}
                     onError={(e) => (e.target.src = FALLBACK_IMAGE)}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
+                  {/* تدرج خفيف تحت عشان الأيقونة/الخصم يبانوا واضحين */}
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-black/0 to-black/0" />
+
                   {hasOffer && (
-                    <span className="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-[var(--color-accent)] px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-white shadow-lg">
+                    <span className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-[var(--color-accent)] px-2.5 py-1 text-[9px] font-black uppercase tracking-wider text-white shadow-lg">
                       <FaFire size={9} />
                       -{discountPercent}%
                     </span>
                   )}
+
+                  <span className="absolute right-3 top-3 flex items-center gap-1.5 rounded-full bg-black/40 backdrop-blur-sm px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white">
+                    {categoryIcon(product.Category)}
+                    {product.Category}
+                  </span>
                 </div>
 
-                {/* التفاصيل - على اليمين */}
-                <div className="flex flex-1 flex-col justify-between p-4 opacity-80">
+                {/* التفاصيل */}
+                <div className="flex flex-1 flex-col justify-between p-4">
                   <div>
-                    <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)]">
-                      {categoryIcon(product.Category)}
-                      {product.Category}
-                    </span>
-
-                    <h3 className="mt-1 truncate font-serif text-base font-semibold italic text-[var(--color-text)] transition-colors group-hover:text-[var(--color-accent)] sm:text-lg">
+                    <h3 className="truncate font-serif text-lg font-semibold italic text-[var(--color-text)] transition-colors group-hover:text-[var(--color-accent)]">
                       {product.name}
                     </h3>
 
@@ -158,7 +175,8 @@ export default function CardSlider() {
                             {firstAccount.price}
                           </span>
                           <span className="text-sm font-bold text-[var(--color-accent)]">
-                            {firstAccount.priceOffer} <span className="text-[10px] font-normal">EGP</span>
+                            {firstAccount.priceOffer}{" "}
+                            <span className="text-[10px] font-normal">EGP</span>
                           </span>
                         </div>
                       ) : (
