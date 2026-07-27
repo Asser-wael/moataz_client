@@ -119,37 +119,35 @@ export default function Products() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => dispatch(setCat("All"))}
-            className={`rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors ${
-              cat === "All"
+            className={`rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors ${cat === "All"
                 ? "border-[var(--color-accent)] bg-[var(--color-accent)] text-white shadow-[0_0_16px_-4px_var(--color-accent)]"
                 : "card-bg-soft border-[var(--color-border)] text-[var(--color-text)] hover:border-[var(--color-accent)]"
-            }`}
+              }`}
           >
             All
           </motion.button>
 
           {loadingCategories
             ? Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="h-8 w-20 animate-pulse rounded-full bg-[var(--color-card)]" />
-              ))
+              <div key={i} className="h-8 w-20 animate-pulse rounded-full bg-[var(--color-card)]" />
+            ))
             : categories?.map((category, index) => (
-                <motion.button
-                  key={category._id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: index * 0.03 }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => dispatch(setCat(category.name))}
-                  className={`rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors ${
-                    cat === category.name
-                      ? "border-[var(--color-accent)] bg-[var(--color-accent)] text-white shadow-[0_0_16px_-4px_var(--color-accent)]"
-                      : "card-bg-soft border-[var(--color-border)] text-[var(--color-text)] hover:border-[var(--color-accent)]"
+              <motion.button
+                key={category._id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: index * 0.03 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => dispatch(setCat(category.name))}
+                className={`rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors ${cat === category.name
+                    ? "border-[var(--color-accent)] bg-[var(--color-accent)] text-white shadow-[0_0_16px_-4px_var(--color-accent)]"
+                    : "card-bg-soft border-[var(--color-border)] text-[var(--color-text)] hover:border-[var(--color-accent)]"
                   }`}
-                >
-                  {category.name}
-                </motion.button>
-              ))}
+              >
+                {category.name}
+              </motion.button>
+            ))}
         </div>
 
         {!loadingProducts && (
@@ -185,13 +183,13 @@ export default function Products() {
                   {/* Image */}
                   <div
                     onClick={() => dispatch(setView(product))}
-                    className="relative aspect-[4/3] w-full cursor-pointer overflow-hidden bg-[var(--color-bg)]"
+                    className="relative aspect-video w-full cursor-pointer overflow-hidden bg-[var(--color-bg)]"
                   >
                     <img
                       src={`${import.meta.env.VITE_API_URL}/uploads/${product.image}`}
                       alt={product.name}
                       onError={(e) => (e.target.src = FALLBACK_IMAGE)}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
 
