@@ -62,21 +62,19 @@ export default function CardSlider() {
         <div className="flex gap-2">
           <button
             ref={prevRef}
-            className={`p-3 rounded-full border border-[var(--color-border)] text-[var(--color-text)] transition-all duration-300 ${
-              canScrollLeft
+            className={`p-3 rounded-full border border-[var(--color-border)] text-[var(--color-text)] transition-all duration-300 ${canScrollLeft
                 ? "opacity-100 hover:bg-[var(--color-text)] hover:text-[var(--color-bg)] cursor-pointer"
                 : "opacity-30 cursor-not-allowed"
-            }`}
+              }`}
           >
             <FaChevronLeft size={14} />
           </button>
           <button
             ref={nextRef}
-            className={`p-3 rounded-full border border-[var(--color-border)] text-[var(--color-text)] transition-all duration-300 ${
-              canScrollRight
+            className={`p-3 rounded-full border border-[var(--color-border)] text-[var(--color-text)] transition-all duration-300 ${canScrollRight
                 ? "opacity-100 hover:bg-[var(--color-text)] hover:text-[var(--color-bg)] cursor-pointer"
                 : "opacity-30 cursor-not-allowed"
-            }`}
+              }`}
           >
             <FaChevronRight size={14} />
           </button>
@@ -117,12 +115,12 @@ export default function CardSlider() {
                 className="group flex h-full cursor-pointer items-stretch overflow-hidden rounded-3xl border border-[var(--color-border)] bg-[var(--color-card)] transition-colors hover:border-[var(--color-accent)]/50 hover:shadow-[0_16px_40px_-16px_var(--color-accent)]"
               >
                 {/* الصورة - مربعة صغيرة على الشمال */}
-                <div className="relative w-50 shrink-0 overflow-hidden bg-[var(--color-bg)] sm:w-40">
+                <div className="relative w-50 aspect-video shrink-0 self-start overflow-hidden bg-[var(--color-bg)] sm:w-40">
                   <img
                     src={`${import.meta.env.VITE_API_URL}/uploads/${product.image}`}
                     alt={product.name}
                     onError={(e) => (e.target.src = FALLBACK_IMAGE)}
-                    className="h-full w-full object-cover aspect-video  transition-transform duration-500 group-hover:scale-110"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                   {hasOffer && (
                     <span className="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-[var(--color-accent)] px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-white shadow-lg">
