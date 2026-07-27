@@ -20,13 +20,22 @@ function categoryIcon(category) {
   return null;
 }
 
+// كود كتالوج قصير للكارت - PS-014 / XB-002 / PC-030 - زي رقم الصنف في محل حقيقي
+function catalogCode(category, index) {
+  const name = category?.toLowerCase() ?? "";
+  let prefix = "GM";
+  if (name.includes("playstation")) prefix = "PS";
+  else if (name.includes("xbox")) prefix = "XB";
+  else if (name.includes("pc") || name.includes("steam")) prefix = "PC";
+  return `${prefix}-${String(index + 1).padStart(3, "0")}`;
+}
+
 export default function CardSlider() {
   const dispatch = useDispatch();
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
   // خزّنا الـ swiper instance في state عشان نقدر نربط الأزرار بعد ما الـ refs تتعمل mount
-  // (ده اللي كان مخرب الأزرار: onBeforeInit كان بيتنفذ قبل ما prevRef/nextRef يبقوا موجودين)
   const [swiperInstance, setSwiperInstance] = useState(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -109,11 +118,11 @@ export default function CardSlider() {
         }}
         onReachBeginning={() => setCanScrollLeft(false)}
         onReachEnd={() => setCanScrollRight(false)}
-        spaceBetween={20}
+        spaceBetween={24}
         slidesPerView="auto"
-        className="!overflow-visible !pb-6"
+        className="!overflow-visible !pb-8"
       >
-        {offers.map((product) => {
+        {offers.map((product, index) => {
           const firstAccount = product.account?.[0];
           const hasOffer = Boolean(product.offer) && firstAccount?.priceOffer > 0;
           const discountPercent = hasOffer
@@ -121,14 +130,20 @@ export default function CardSlider() {
             : null;
 
           return (
-            <SwiperSlide key={product._id} className="!w-[360px] px-2">
+            <SwiperSlide key={product._id} className="!w-[340px] px-2">
               <motion.div
                 whileHover={{ y: -6 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
                 onClick={() => dispatch(setView(product))}
-                className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-3xl border border-[var(--color-border)] bg-[var(--color-card)] transition-all duration-300 hover:border-[var(--color-accent)]/60 hover:shadow-[0_20px_45px_-18px_var(--color-accent)]"
+                className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)] transition-all duration-300 hover:border-[var(--color-accent)]/60 hover:shadow-[0_24px_48px_-20px_var(--color-accent)]"
               >
-                {/* الصورة - 16:9 كاملة العرض */}
+                {/* شريط الكاتيجوري - علاقة معلقة على حافة الصورة زي تاج على كيس */}
+                <div className="absolute right-4 top-0 z-10 flex items-center gap-1.5 rounded-b-lg bg-[var(--color-accent)] px-2.5 py-1.5 text-[9px] font-black uppercase tracking-widest text-white shadow-md">
+                  {categoryIcon(product.Category)}
+                  {product.Category}
+                </div>
+
+                {/* الصورة 16:9 */}
                 <div className="relative aspect-video w-full overflow-hidden bg-[var(--color-bg)]">
                   <img
                     src={`${import.meta.env.VITE_API_URL}/uploads/${product.image}`}
@@ -136,25 +151,41 @@ export default function CardSlider() {
                     onError={(e) => (e.target.src = FALLBACK_IMAGE)}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
-                  {/* تدرج خفيف تحت عشان الأيقونة/الخصم يبانوا واضحين */}
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-black/0 to-black/0" />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--color-card)] via-black/10 to-black/0" />
 
+                  {/* ختم الخصم - زي ستامب مطاطي مايل */}
                   {hasOffer && (
-                    <span className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-[var(--color-accent)] px-2.5 py-1 text-[9px] font-black uppercase tracking-wider text-white shadow-lg">
-                      <FaFire size={9} />
-                      -{discountPercent}%
-                    </span>
+                    <div className="absolute left-3 bottom-3 -rotate-[10deg] rounded-md border-2 border-dashed border-white/80 px-2 py-1 text-[10px] font-black uppercase tracking-wider text-white">
+                      <span className="flex items-center gap-1">
+                        <FaFire size={9} />
+                        -{discountPercent}%
+                      </span>
+                    </div>
                   )}
-
-                  <span className="absolute right-3 top-3 flex items-center gap-1.5 rounded-full bg-black/40 backdrop-blur-sm px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white">
-                    {categoryIcon(product.Category)}
-                    {product.Category}
-                  </span>
                 </div>
 
+                {/* حافة التذكرة المخرومة - بتفصل الصورة عن التفاصيل */}
+                <div
+                  aria-hidden
+                  className="h-3 w-full bg-[var(--color-bg)]"
+                  style={{
+                    backgroundImage:
+                      "radial-gradient(circle at 8px 8px, var(--color-card) 8px, transparent 8.5px)",
+                    backgroundSize: "16px 16px",
+                    backgroundPosition: "-8px -8px",
+                    backgroundRepeat: "repeat-x",
+                  }}
+                />
+
                 {/* التفاصيل */}
-                <div className="flex flex-1 flex-col justify-between p-4">
+                <div className="flex flex-1 flex-col justify-between gap-3 bg-[var(--color-card)] p-4 pt-3">
                   <div>
+                    <div className="mb-1 flex items-center justify-between">
+                      <span className="font-mono text-[9px] tracking-[0.2em] text-[var(--color-muted)]">
+                        {catalogCode(product.Category, index)}
+                      </span>
+                    </div>
+
                     <h3 className="truncate font-serif text-lg font-semibold italic text-[var(--color-text)] transition-colors group-hover:text-[var(--color-accent)]">
                       {product.name}
                     </h3>
@@ -164,7 +195,7 @@ export default function CardSlider() {
                     </p>
                   </div>
 
-                  <div className="mt-3 flex items-end justify-between gap-2">
+                  <div className="flex items-end justify-between gap-2 border-t border-dashed border-[var(--color-border)] pt-3">
                     <div>
                       <span className="block text-[9px] uppercase tracking-wider text-[var(--color-muted)]">
                         {firstAccount?.name || "Standard Edition"}
@@ -186,8 +217,9 @@ export default function CardSlider() {
                       )}
                     </div>
 
-                    <span className="shrink-0 rounded-full bg-[var(--color-accent)]/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)] transition-colors group-hover:bg-[var(--color-accent)] group-hover:text-white">
+                    <span className="flex shrink-0 items-center gap-1 rounded-full bg-[var(--color-accent)]/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)] transition-all group-hover:gap-2 group-hover:bg-[var(--color-accent)] group-hover:text-white">
                       Explore
+                      <FaChevronRight size={8} />
                     </span>
                   </div>
                 </div>
