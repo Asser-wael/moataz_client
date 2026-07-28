@@ -136,10 +136,14 @@ export default function CardSlider() {
           return (
             <SwiperSlide key={product._id} className="!w-[340px] px-2">
               <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  duration: 0.3,
+                  delay: index * 0.1,
+                }}
                 whileHover={{ y: -6 }}
-                transition={{ duration: 0.3, ease: "easeOut" ,delay : index * 0.2}}
-                onClick={() => dispatch(setView(product))}
-                className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)] transition-all duration-300 hover:border-[var(--color-accent)]/60 hover:shadow-[0_24px_48px_-20px_var(--color-accent)]"
               >
                 {/* شريط الكاتيجوري - علاقة معلقة على حافة الصورة زي تاج على كيس */}
                 <div className="absolute right-4 top-0 z-10 flex items-center gap-1.5 rounded-b-lg bg-[var(--color-accent)] px-2.5 py-1.5 text-[9px] font-black uppercase tracking-widest text-white shadow-md">
