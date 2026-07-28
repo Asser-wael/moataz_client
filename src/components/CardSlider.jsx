@@ -137,7 +137,7 @@ export default function CardSlider() {
             <SwiperSlide key={product._id} className="!w-[340px] px-2">
               <motion.div
                 whileHover={{ y: -6 }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
+                transition={{ duration: 0.3, ease: "easeOut" ,delay : index * 0.2}}
                 onClick={() => dispatch(setView(product))}
                 className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)] transition-all duration-300 hover:border-[var(--color-accent)]/60 hover:shadow-[0_24px_48px_-20px_var(--color-accent)]"
               >
