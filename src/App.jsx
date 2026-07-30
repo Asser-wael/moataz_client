@@ -82,7 +82,11 @@ export default function App() {
   const { userData: user } = useSelector(
     (state) => state.authSlice
   );
-
+  useEffect(() => {
+    if (user) {
+      subscribeToPush();
+    }
+  }, [user]);
   useEffect(() => {
     dispatch(getUser());
     dispatch(getCart());
