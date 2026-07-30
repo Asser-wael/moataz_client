@@ -135,6 +135,7 @@ export default function CardSlider() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
+                onClick={()=> dispatch(setView(product._id))}
                 transition={{
                   duration: 0.3,
                   delay: index * 0.1,
@@ -221,7 +222,7 @@ export default function CardSlider() {
                       )}
                     </div>
 
-                    <span onClick={()=> dispatch(setView(product._id))} className=" cursor-pointer flex shrink-0 items-center gap-1 rounded-full bg-[var(--color-accent)]/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)] transition-all group-hover:gap-2 group-hover:bg-[var(--color-accent)] group-hover:text-white">
+                    <span  className=" cursor-pointer flex shrink-0 items-center gap-1 rounded-full bg-[var(--color-accent)]/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)] transition-all group-hover:gap-2 group-hover:bg-[var(--color-accent)] group-hover:text-white">
                       Explore=
                       <FaChevronRight size={8} />
                     </span>
