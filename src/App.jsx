@@ -26,6 +26,7 @@ import { setNotification } from "./features/notificationSlice";
 import { getAdminOrders, updateTracking } from "./features/orderSlice";
 import { show } from "./features/soundNotificationSlice";
 import { getCart } from "./features/cartSlice";
+import { subscribeToPush } from "./utils/pushSubscribe";
 
 const playStatusSound = () => {
   new Audio(status).play().catch(() => { });
