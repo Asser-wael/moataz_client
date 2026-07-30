@@ -11,7 +11,6 @@ import "swiper/css/navigation";
 
 const FALLBACK_IMAGE = "https://placehold.co/300x300/111/fff?text=Game";
 
-// أيقونة واحدة بتتحدد حسب اسم الكاتيجوري - بدل ما نكررها 3 مرات جوه الكارد
 function categoryIcon(category) {
   const name = category?.toLowerCase() ?? "";
   if (name.includes("playstation")) return <SiSony size={11} />;
@@ -20,7 +19,6 @@ function categoryIcon(category) {
   return null;
 }
 
-// كود كتالوج قصير للكارت - PS-014 / XB-002 / PC-030 - زي رقم الصنف في محل حقيقي
 function catalogCode(category, index) {
   const name = category?.toLowerCase() ?? "";
   let prefix = "GM";
@@ -35,7 +33,6 @@ export default function CardSlider() {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
-  // خزّنا الـ swiper instance في state عشان نقدر نربط الأزرار بعد ما الـ refs تتعمل mount
   const [swiperInstance, setSwiperInstance] = useState(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -50,7 +47,6 @@ export default function CardSlider() {
     }
   }, [swiperInstance]);
 
-  // السلايدر ده بيعتمد بالكامل على الـ offers الجاية من getOffers
   const { offers = [], loadingoffers } = useSelector((state) => state.customuseSlice);
 
   if (loadingoffers) {
