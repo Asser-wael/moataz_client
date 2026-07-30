@@ -32,17 +32,39 @@ export default function Checkout() {
       const res = await dispatch(checkOut(formData));
       const orderId = res.payload?.order?._id;
       const order = res.payload.order;
+      const now = new Date();
 
-      const message = `🛒 طلب جديد
-رقم الاوردر :${orderId}
-      👤 الاسم: ${order.walletName}
-      📱 رقم المحفظة: ${order.walletNumber}
-      💬 رقم الواتساب: ${order.whats}
-      💳 نوع المحفظة: ${order.walletType}
-      🆔 رقم الطلب: ${order._id}
-      💰 الإجمالي: ${order.totalPrice} جنيه
-`;
+      const orderTime = now.toLocaleString("ar-EG", {
+        dateStyle: "full",
+        timeStyle: "short",
+      });
 
+      const message = `🛍️ *طلب جديد*
+
+━━━━━━━━━━━━━━━━━━
+
+🆔 رقم الأوردر: ${orderId}
+
+👤 اسم المحول:
+${order.walletName}
+
+📱 رقم المحفظة:
+${order.walletNumber}
+
+💬 رقم الواتساب:
+${order.whats}
+
+💳 نوع المحفظة:
+${order.walletType}
+
+💰 إجمالي الطلب:
+${order.totalPrice} جنيه
+
+🕒 وقت إرسال الطلب:
+${orderTime}
+
+━━━━━━━━━━━━━━━━━━
+✅ يرجى مراجعة الطلب وتأكيده.`;
 
       if (orderId) {
         socket.emit("join-order", orderId);
