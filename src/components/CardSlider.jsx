@@ -225,8 +225,8 @@ export default function CardSlider() {
                       )}
                     </div>
 
-                    <span className="flex shrink-0 items-center gap-1 rounded-full bg-[var(--color-accent)]/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)] transition-all group-hover:gap-2 group-hover:bg-[var(--color-accent)] group-hover:text-white">
-                      Explore
+                    <span onClick={()=> dispatch(setView())} className="flex shrink-0 items-center gap-1 rounded-full bg-[var(--color-accent)]/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)] transition-all group-hover:gap-2 group-hover:bg-[var(--color-accent)] group-hover:text-white">
+                      Explore=
                       <FaChevronRight size={8} />
                     </span>
                   </div>
