@@ -162,34 +162,9 @@ export const logoutUser = createAsyncThunk(
     "auth/logout",
     async (_, { rejectWithValue }) => {
         try {
-            try {
-                const reg = await navigator.serviceWorker.getRegistration();
-                if (reg) {
-                    const sub = await reg.pushManager.getSubscription();
-                    if (sub) {
-                        try {
-                            await fetch(`${API_URL}/delete-admin-subscription`, {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({ endpoint: sub.endpoint }),
-                            });
-                        } catch (err) {
-                            console.error("Failed to delete admin subscription on server:", err);
-                        }
 
-                        try {
-                            await sub.unsubscribe();
-                        } catch (err) {
-                            console.error("Failed to unsubscribe:", err);
-                        }
-                    }
-                }
-            } catch (err) {
-                console.error("Failed to clean up push subscription on logout:", err);
-            }
-
-            await axios.post(
-                `${API_URL}/logout`,
+            await api.post(
+                `/logout`,
                 {},
                 { withCredentials: true }
             );
