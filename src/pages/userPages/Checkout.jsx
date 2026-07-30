@@ -34,16 +34,30 @@ export default function Checkout() {
       const order = res.payload.order;
       const now = new Date();
 
+      const now = new Date();
+
       const orderTime = now.toLocaleString("ar-EG", {
         dateStyle: "full",
         timeStyle: "short",
       });
 
+      const cartItems = order.cart
+        .map(
+          (item, index) => `
+${index + 1}️⃣ ${item.name}
+   🔹 الاختيار: ${item.option}
+   💵 السعر: ${item.price} جنيه
+   📦 الكمية: ${item.count}
+`
+        )
+        .join("\n");
+
       const message = `🛍️ *طلب جديد*
 
 ━━━━━━━━━━━━━━━━━━
 
-🆔 رقم الأوردر: ${orderId}
+🆔 رقم الأوردر:
+${orderId}
 
 👤 اسم المحول:
 ${order.walletName}
@@ -57,6 +71,14 @@ ${order.whats}
 💳 نوع المحفظة:
 ${order.walletType}
 
+━━━━━━━━━━━━━━━━━━
+
+🛒 المنتجات:
+
+${cartItems}
+
+━━━━━━━━━━━━━━━━━━
+
 💰 إجمالي الطلب:
 ${order.totalPrice} جنيه
 
@@ -65,7 +87,6 @@ ${orderTime}
 
 ━━━━━━━━━━━━━━━━━━
 ✅ يرجى مراجعة الطلب وتأكيده.`;
-
       if (orderId) {
         socket.emit("join-order", orderId);
         window.dispatchEvent(new Event("orderPlaced"));
