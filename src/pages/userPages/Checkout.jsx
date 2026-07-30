@@ -34,8 +34,6 @@ export default function Checkout() {
       const order = res.payload.order;
       const now = new Date();
 
-      const now = new Date();
-
       const orderTime = now.toLocaleString("ar-EG", {
         dateStyle: "full",
         timeStyle: "short",
