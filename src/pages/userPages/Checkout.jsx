@@ -31,12 +31,29 @@ export default function Checkout() {
       formData.append("image", data.image[0]);
       const res = await dispatch(checkOut(formData));
       const orderId = res.payload?.order?._id;
+      const order = res.payload.order;
+
+      const message = `🛒 طلب جديد
+رقم الاوردر :${orderId}
+      👤 الاسم: ${order.walletName}
+      📱 رقم المحفظة: ${order.walletNumber}
+      💬 رقم الواتساب: ${order.whats}
+      💳 نوع المحفظة: ${order.walletType}
+      🆔 رقم الطلب: ${order._id}
+      💰 الإجمالي: ${order.totalPrice} جنيه
+`;
+
 
       if (orderId) {
         socket.emit("join-order", orderId);
         window.dispatchEvent(new Event("orderPlaced"));
         navigate("/");
       }
+      window.open(
+        `https://wa.me/201111191289?text=${encodeURIComponent(message)}`,
+        "_blank"
+      );
+
     } finally {
       setSubmitting(false);
     }
