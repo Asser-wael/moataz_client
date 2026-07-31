@@ -86,7 +86,6 @@ export default function App() {
   useEffect(() => {
     if (user) {
       subscribeToPush();
-    dispatch(setNotification({ message: "done", type: "sccess" }));
       
     }
   }, [user]);
