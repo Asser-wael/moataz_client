@@ -1,5 +1,5 @@
 import api from "../api/api";
-import {store} from "../app/store";
+import { store } from "../app/store";
 import { setNotification } from "../features/notificationSlice";
 
 export async function subscribeToPush() {
@@ -11,12 +11,16 @@ export async function subscribeToPush() {
     if (permission !== "granted") return;
 
 
-    const subscription = await register.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: urlBase64ToUint8Array(
-        import.meta.env.VITE_VAPID_PUBLIC_KEY
-      ),
-    });
+    let subscription = await register.pushManager.getSubscription();
+
+    if (!subscription) {
+      subscription = await register.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(
+          import.meta.env.VITE_VAPID_PUBLIC_KEY
+        ),
+      });
+    }
 
 
     const res = await api.post("/admin/notifications/subscribe", {
@@ -33,7 +37,8 @@ export async function subscribeToPush() {
 
 
   } catch (err) {
-
+    console.log(err);
+    console.log(err.response);
     console.log(err.response?.data);
 
     store.dispatch(
