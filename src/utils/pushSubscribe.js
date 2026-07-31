@@ -1,6 +1,6 @@
 import api from "../api/api";
 import store from "../store/store";
-import { setNotification } from "../store/notificationSlice";
+import { setNotification } from "../features/notificationSlice";
 
 export async function subscribeToPush() {
   try {
